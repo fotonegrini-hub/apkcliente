@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>APK Cliente PRO - DN | Gestão de Clientes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .topo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .pesquisa-cnpj {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .pesquisa-cnpj input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+        }
+
+        .pesquisa-cnpj button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #10b981;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .abas {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .aba-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #6b7280;
+            transition: all 0.3s;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .aba-btn.ativo {
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+            background: #eff6ff;
+        }
+
+        .aba-btn:hover:not(.ativo) {
+            color: #374151;
+            background: #f3f4f6;
+        }
+
+        .aba-conteudo {
+            display: none;
+        }
+
+        .aba-conteudo.ativo {
+            display: block;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .acoes button, .acoes input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-add {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .clientes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #111827;
+            padding-right: 30px;
+        }
+
+        .card p {
+            margin: 6px 0;
+            font-size: 14px;
+        }
+
+        .card-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .edit-btn {
+            color: #2563eb;
+        }
+
+        .delete-btn {
+            color: #ef4444;
+        }
+
+        .share-btn {
+            color: #10b981;
+        }
+
+        .valor-devendo {
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .valor-opcional {
+            color: #9ca3af;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .copiavel {
+            background: #f3f4f6;
+            padding: 8px 10px;
+            border-radius: 8px;
+            user-select: all;
+            cursor: pointer;
+            font-weight: bold;
+            color: #111827;
+            border: 1px dashed #9ca3af;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+
+        .copiavel:active {
+            background: #e5e7eb;
+        }
+
+        .salvo-info {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #10b981;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            z-index: 20;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            border-radius: 18px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-content textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: Arial, sans-serif;
+        }
+
+        .salvar {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #10b981;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn-cancelar {
+            background: #6b7280;
+            margin-top: 8px;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+        }
+
+        .btn-email {
+            background: #3b5998;
+        }
+
+        .campo-opcional {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+
+        .botoes-share {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .botoes-share button {
+            flex: 1;
+        }
+
+        @media(max-width: 700px){
+            .topo {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .logo {
+                text-align: center;
+            }
+            .aba-btn {
+                flex: 1;
+                text-align: center;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="topo">
+        <div class="logo">📋 APK Cliente PRO - DN</div>
+        <div class="pesquisa-cnpj">
+            <input type="text" id="cnpjBusca" placeholder="Pesquisar CNPJ (abrirá Receita)" />
+            <button onclick="buscarCNPJ()">🔍 Buscar</button>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="abas">
+        <button class="aba-btn ativo" onclick="trocarAba('lista')">📋 Lista de Clientes</button>
+        <button class="aba-btn" onclick="trocarAba('editar')">✏️ Editar Cliente</button>
+    </div>
+
+    <div id="abaLista" class="aba-conteudo ativo">
+        <div class="acoes">
+            <button class="btn-add" onclick="abrirModal()">+ Adicionar Cliente</button>
+            <input type="text" id="buscaRapida" placeholder="🔎 Buscar cliente por nome, doc ou telefone..." onkeyup="filtrarClientes()" />
+        </div>
+        <div class="clientes" id="listaClientes"></div>
+    </div>
+
+    <div id="abaEditar" class="aba-conteudo">
+        <div class="clientes" id="listaEdicao"></div>
+    </div>
+</div>
+
+<!-- Modal de Cadastro/Edição -->
+<div id="modalCliente" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitulo">📌 Cadastrar Cliente</h2>
+        <input type="text" id="nomeCliente" placeholder="Nome do Cliente *" />
+        <input type="text" id="documentoCliente" placeholder="CPF ou CNPJ *" />
+        <input type="text" id="telefoneCliente" placeholder="Telefone (WhatsApp) - opcional" />
+        <div class="campo-opcional">* Campos obrigatórios | Telefone permite envio via WhatsApp</div>
+        <input type="number" step="0.01" id="valorCliente" placeholder="Valor (opcional - deixe em branco se não houver)" />
+        <input type="date" id="dataCliente" />
+        <button class="salvar" onclick="salvarCliente()">✅ Salvar Cliente</button>
+        <button class="salvar btn-cancelar" onclick="fecharModal()">❌ Cancelar</button>
+    </div>
+</div>
+
+<!-- Modal de Compartilhar -->
+<div id="modalCompartilhar" class="modal">
+    <div class="modal-content">
+        <h2>📤 Compartilhar Informações</h2>
+        <div id="mensagemPreview" style="background:#f3f4f6;padding:12px;border-radius:10px;margin-bottom:15px;font-size:14px;"></div>
+        <textarea id="mensagemPersonalizada" placeholder="Edite a mensagem antes de enviar..."></textarea>
+        <div class="botoes-share">
+            <button class="salvar btn-whatsapp" onclick="enviarWhatsApp()">📱 WhatsApp</button>
+            <button class="salvar btn-email" onclick="enviarEmail()">📧 E-mail</button>
+        </div>
+        <button class="salvar" onclick="copiarMensagem()">📋 Copiar Mensagem</button>
+        <button class="salvar btn-cancelar" onclick="fecharModalCompartilhar()">❌ Fechar</button>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('modalCliente');
+    const modalCompartilhar = document.getElementById('modalCompartilhar');
+    const listaClientes = document.getElementById('listaClientes');
+    const listaEdicao = document.getElementById('listaEdicao');
+    let clienteEditando = null;
+    let editandoIndex = null;
+    let clienteParaCompartilhar = null;
+
+    function trocarAba(aba) {
+        document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
+        if (aba === 'lista') {
+            document.querySelector('.aba-btn:first-child').classList.add('ativo');
+            document.getElementById('abaLista').classList.add('ativo');
+            document.getElementById('abaEditar').classList.remove('ativo');
+            renderizarListaClientes();
+        } else {
+            document.querySelector('.aba-btn:last-child').classList.add('ativo');
+            document.getElementById('abaEditar').classList.add('ativo');
+            document.getElementById('abaLista').classList.remove('ativo');
+            renderizarListaEdicao();
+        }
+    }
+
+    function abrirModal(cliente = null, index = null) {
+        if (cliente) {
+            clienteEditando = cliente;
+            editandoIndex = index;
+            document.getElementById('modalTitulo').innerText = '✏️ Editar Cliente';
+            document.getElementById('nomeCliente').value = cliente.nome || '';
+            document.getElementById('documentoCliente').value = cliente.documento || '';
+            document.getElementById('telefoneCliente').value = cliente.telefone || '';
+            document.getElementById('valorCliente').value = cliente.valor || '';
+            document.getElementById('dataCliente').value = cliente.data || '';
+        } else {
+            clienteEditando = null;
+            editandoIndex = null;
+            document.getElementById('modalTitulo').innerText = '📌 Cadastrar Cliente';
+            document.getElementById('nomeCliente').value = '';
+            document.getElementById('documentoCliente').value = '';
+            document.getElementById('telefoneCliente').value = '';
+            document.getElementById('valorCliente').value = '';
+            document.getElementById('dataCliente').value = '';
+        }
+        modal.style.display = 'flex';
+    }
+
+    function fecharModal() {
+        modal.style.display = 'none';
+        clienteEditando = null;
+        editandoIndex = null;
+    }
+
+    function abrirModalCompartilhar(cliente) {
+        clienteParaCompartilhar = cliente;
+        const mensagem = gerarMensagem(cliente);
+        document.getElementById('mensagemPreview').innerHTML = mensagem.replace(/\n/g, '<br>');
+        document.getElementById('mensagemPersonalizada').value = mensagem;
+        modalCompartilhar.style.display = 'flex';
+    }
+
+    function fecharModalCompartilhar() {
+        modalCompartilhar.style.display = 'none';
+        clienteParaCompartilhar = null;
+    }
+
+    function gerarMensagem(cliente) {
+        const valorFormatado = cliente.valor && parseFloat(cliente.valor) !== 0 ? 
+            new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseFloat(cliente.valor)) : 
+            'Não informado';
+        const dataFormatada = formatarDataParaExibir(cliente.data);
+        const nomeEmpresa = "APK Cliente PRO - DN";
+        
+        let mensagem = `🏢 *${nomeEmpresa}*\n\n`;
+        mensagem += `Olá *${cliente.nome}*, tudo bem?\n\n`;
+        mensagem += `📋 *Informações:*\n`;
+        mensagem += `━━━━━━━━━━━━━━━━━━━━\n`;
+        mensagem += `📌 *Cliente:* ${cliente.nome}\n`;
+        mensagem += `📄 *Documento:* ${cliente.documento}\n`;
+        if (cliente.telefone) {
+            mensagem += `📞 *Telefone:* ${cliente.telefone}\n`;
+        }
+        mensagem += `💰 *Valor:* ${valorFormatado}\n`;
+        mensagem += `📅 *Data:* ${dataFormatada}\n`;
+        mensagem += `━━━━━━━━━━━━━━━━━━━━\n\n`;
+        mensagem += `🔹 *Informações adicionais:*\n\n`;
+        mensagem += `📲 *Entre em contato para mais detalhes.*\n\n`;
+        mensagem += `Agradecemos a atenção! 🙏`;
+        
+        return mensagem;
+    }
+
+    function enviarWhatsApp() {
+        if (!clienteParaCompartilhar) return;
+        
+        let telefone = clienteParaCompartilhar.telefone;
+        if (!telefone) {
+            alert('⚠️ Este cliente não possui telefone cadastrado. Adicione um telefone para enviar mensagem via WhatsApp.');
+            return;
+        }
+        
+        telefone = telefone.replace(/\D/g, '');
+        if (telefone.length < 10) {
+            alert('⚠️ Número de telefone inválido. Use o formato (DD) 99999-9999');
+            return;
+        }
+        
+        if (!telefone.startsWith('55')) {
+            telefone = '55' + telefone;
+        }
+        
+        const mensagem = document.getElementById('mensagemPersonalizada').value;
+        const mensagemCodificada = encodeURIComponent(mensagem);
+        const url = `https://wa.me/${telefone}?text=${mensagemCodificada}`;
+        window.open(url, '_blank');
+    }
+
+    function enviarEmail() {
+        if (!clienteParaCompartilhar) return;
+        
+        const mensagem = document.getElementById('mensagemPersonalizada').value;
+        const assunto = encodeURIComponent(`Informações - ${clienteParaCompartilhar.nome}`);
+        const corpo = encodeURIComponent(mensagem);
+        const url = `mailto:?subject=${assunto}&body=${corpo}`;
+        window.open(url, '_blank');
+    }
+
+    function copiarMensagem() {
+        const mensagem = document.getElementById('mensagemPersonalizada').value;
+        navigator.clipboard.writeText(mensagem).then(() => {
+            alert('✅ Mensagem copiada para a área de transferência!');
+        }).catch(() => {
+            alert('⚠️ Não foi possível copiar a mensagem');
+        });
+    }
+
+    window.onclick = function(e) {
+        if (e.target === modal) {
+            fecharModal();
+        }
+        if (e.target === modalCompartilhar) {
+            fecharModalCompartilhar();
+        }
+    }
+
+    function salvarCliente() {
+        const nome = document.getElementById('nomeCliente').value.trim();
+        const documento = document.getElementById('documentoCliente').value.trim();
+        const telefone = document.getElementById('telefoneCliente').value.trim();
+        let valor = document.getElementById('valorCliente').value;
+        let data = document.getElementById('dataCliente').value;
+
+        if (nome === '' || documento === '') {
+            alert('❌ Preencha os campos obrigatórios: Nome e Documento');
+            return;
+        }
+
+        if (valor === '') valor = '0';
+        const dataAtual = new Date().toISOString().slice(0,10);
+        if (data === '') data = dataAtual;
+
+        let clientes = carregarDados();
+
+        if (clienteEditando && editandoIndex !== null) {
+            clientes[editandoIndex] = {
+                nome: nome,
+                documento: documento,
+                telefone: telefone,
+                valor: valor,
+                data: data
+            };
+            alert('✅ Cliente atualizado com sucesso!');
+        } else {
+            clientes.push({
+                nome: nome,
+                documento: documento,
+                telefone: telefone,
+                valor: valor,
+                data: data
+            });
+            alert('✅ Cliente cadastrado com sucesso!');
+        }
+
+        salvarDados(clientes);
+        fecharModal();
+        renderizarListaClientes();
+        renderizarListaEdicao();
+    }
+
+    function renderizarListaClientes() {
+        const clientes = carregarDados();
+        if (clientes.length === 0) {
+            listaClientes.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nenhum cliente cadastrado. Clique em "+ Adicionar Cliente" para começar.</div>';
+            return;
+        }
+
+        listaClientes.innerHTML = '';
+        clientes.forEach((cliente, index) => {
+            const valorFormatado = cliente.valor && parseFloat(cliente.valor) !== 0 ? 
+                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseFloat(cliente.valor)) : 
+                'Não informado';
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+                <div class="card-actions">
+                    <button class="icon-btn share-btn" onclick="abrirModalCompartilharClientes(${index})" title="Compartilhar">📤</button>
+                    <button class="icon-btn edit-btn" onclick="abrirModalClienteIndex(${index})" title="Editar">✏️</button>
+                    <button class="icon-btn delete-btn" onclick="removerCliente(${index})" title="Remover">🗑️</button>
+                </div>
+                <h3>${escapeHTML(cliente.nome)}</h3>
+                <p><strong>CNPJ/CPF:</strong></p>
+                <div class="copiavel" onclick="copiarDocumento('${escapeHTML(cliente.documento)}')">${escapeHTML(cliente.documento)}</div>
+                ${cliente.telefone ? `<p><strong>Telefone:</strong> ${escapeHTML(cliente.telefone)}</p>` : '<p><em>Telefone não informado</em></p>'}
+                <p class="${parseFloat(cliente.valor) !== 0 ? 'valor-devendo' : 'valor-opcional'}"><strong>Valor:</strong> ${valorFormatado}</p>
+                <p><strong>Data:</strong> ${formatarDataParaExibir(cliente.data)}</p>
+                <button class="salvar" style="margin-top:10px;background:#10b981;" onclick="abrirModalCompartilharClientes(${index})">📤 Compartilhar</button>
+                <div class="salvo-info">✔ Dados salvos automaticamente</div>
+            `;
+            listaClientes.appendChild(card);
+        });
+    }
+
+    function abrirModalCompartilharClientes(index) {
+        const clientes = carregarDados();
+        abrirModalCompartilhar(clientes[index]);
+    }
+
+    function renderizarListaEdicao() {
+        const clientes = carregarDados();
+        if (clientes.length === 0) {
+            listaEdicao.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nenhum cliente cadastrado. Vá para a aba "Lista de Clientes" e adicione um cliente.</div>';
+            return;
+        }
+
+        listaEdicao.innerHTML = '';
+        clientes.forEach((cliente, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+                <h3>✏️ Editando: ${escapeHTML(cliente.nome)}</h3>
+                <div style="margin-top:15px;">
+                    <label><strong>Nome:</strong></label>
+                    <input type="text" id="edit_nome_${index}" value="${escapeHTML(cliente.nome)}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
+                    
+                    <label><strong>Documento:</strong></label>
+                    <input type="text" id="edit_doc_${index}" value="${escapeHTML(cliente.documento)}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
+                    
+                    <label><strong>Telefone (WhatsApp):</strong></label>
+                    <input type="text" id="edit_tel_${index}" value="${escapeHTML(cliente.telefone)}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
+                    
+                    <label><strong>Valor (opcional):</strong></label>
+                    <input type="number" step="0.01" id="edit_valor_${index}" value="${cliente.valor && parseFloat(cliente.valor) !== 0 ? parseFloat(cliente.valor).toFixed(2) : ''}" placeholder="Deixe em branco se não houver valor" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
+                    
+                    <label><strong>Data:</strong></label>
+                    <input type="date" id="edit_data_${index}" value="${cliente.data}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
+                    
+                    <button class="salvar" style="margin-top:10px;" onclick="salvarEdicaoInline(${index})">💾 Salvar Alterações</button>
+                    <button class="salvar btn-cancelar" style="margin-top:8px;" onclick="removerCliente(${index})">🗑️ Remover Cliente</button>
+                </div>
+            `;
+            listaEdicao.appendChild(card);
+        });
+    }
+
+    function salvarEdicaoInline(index) {
+        const nome = document.getElementById(`edit_nome_${index}`).value.trim();
+        const documento = document.getElementById(`edit_doc_${index}`).value.trim();
+        const telefone = document.getElementById(`edit_tel_${index}`).value.trim();
+        let valor = document.getElementById(`edit_valor_${index}`).value;
+        const data = document.getElementById(`edit_data_${index}`).value;
+
+        if (nome === '' || documento === '') {
+            alert('❌ Nome e Documento são obrigatórios!');
+            return;
+        }
+
+        if (valor === '') valor = '0';
+        
+        let clientes = carregarDados();
+        clientes[index] = {
+            nome: nome,
+            documento: documento,
+            telefone: telefone,
+            valor: valor || '0',
+            data: data || new Date().toISOString().slice(0,10)
+        };
+        salvarDados(clientes);
+        alert('✅ Cliente atualizado com sucesso!');
+        renderizarListaClientes();
+        renderizarListaEdicao();
+    }
+
+    function abrirModalClienteIndex(index) {
+        const clientes = carregarDados();
+        abrirModal(clientes[index], index);
+    }
+
+    function removerCliente(index) {
+        if (confirm('⚠️ Tem certeza que deseja remover este cliente permanentemente?')) {
+            let clientes = carregarDados();
+            clientes.splice(index, 1);
+            salvarDados(clientes);
+            renderizarListaClientes();
+            renderizarListaEdicao();
+            alert('🗑️ Cliente removido com sucesso!');
+        }
+    }
+
+    function filtrarClientes() {
+        const filtro = document.getElementById('buscaRapida').value.toLowerCase();
+        const cards = document.querySelectorAll('#listaClientes .card');
+        cards.forEach(card => {
+            const texto = card.innerText.toLowerCase();
+            card.style.display = texto.includes(filtro) ? 'block' : 'none';
+        });
+    }
+
+    function copiarDocumento(doc) {
+        navigator.clipboard.writeText(doc).then(() => {
+            alert('📋 Documento copiado: ' + doc);
+        }).catch(() => {
+            alert('⚠️ Não foi possível copiar');
+        });
+    }
+
+    function carregarDados() {
+        const dadosRaw = localStorage.getItem('clientesDN_PRO');
+        if (!dadosRaw) return [];
+        try {
+            return JSON.parse(dadosRaw);
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function salvarDados(clientes) {
+        localStorage.setItem('clientesDN_PRO', JSON.stringify(clientes));
+    }
+
+    function formatarDataParaExibir(data) {
+        if (!data) return '';
+        if (data.includes('-')) {
+            const partes = data.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return data;
+    }
+
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function buscarCNPJ() {
+        let cnpj = document.getElementById('cnpjBusca').value.trim();
+        if (cnpj === '') {
+            alert('Digite um CNPJ válido para consulta');
+            return;
+        }
+        cnpj = cnpj.replace(/\D/g, '');
+        if (cnpj.length !== 14) {
+            alert('CNPJ deve ter 14 números. Use apenas números ou formatação.');
+            return;
+        }
+        const url = `https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${cnpj}`;
+        window.open(url, '_blank');
+    }
+
+    function init() {
+        renderizarListaClientes();
+    }
+
+    init();
+</script>
+</body>
+</html>
