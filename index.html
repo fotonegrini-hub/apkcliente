@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>APK Cliente PRO - DN | Gestão de Clientes</title>
+    <title>APK Cliente PRO - DN | Código + Serviços</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: system-ui, 'Segoe UI', Arial, sans-serif;
         }
 
         body {
-            background: #f5f5f5;
-            color: #222;
+            background: #f5f7fb;
+            color: #1e293b;
         }
 
         header {
-            background: #111827;
+            background: #0f172a;
             color: white;
-            padding: 15px;
+            padding: 16px 20px;
             position: sticky;
             top: 0;
             z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .topo {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             justify-content: space-between;
         }
@@ -38,57 +38,67 @@
         .logo {
             font-size: 22px;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .pesquisa-cnpj {
             display: flex;
             gap: 8px;
             flex: 1;
-            min-width: 250px;
+            min-width: 260px;
         }
 
         .pesquisa-cnpj input {
             flex: 1;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 12px 15px;
+            border-radius: 40px;
             border: none;
             outline: none;
+            font-size: 14px;
         }
 
         .pesquisa-cnpj button {
-            padding: 12px 18px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 40px;
             background: #10b981;
             color: white;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pesquisa-cnpj button:hover {
+            background: #059669;
         }
 
         .container {
-            padding: 15px;
-            max-width: 1200px;
+            padding: 20px;
+            max-width: 1300px;
             margin: auto;
         }
 
+        /* Abas principal */
         .abas {
             display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
+            gap: 6px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
             flex-wrap: wrap;
         }
 
         .aba-btn {
-            padding: 12px 24px;
+            padding: 12px 28px;
             background: none;
             border: none;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            color: #6b7280;
-            transition: all 0.3s;
-            border-radius: 10px 10px 0 0;
+            color: #64748b;
+            transition: 0.2s;
+            border-radius: 30px 30px 0 0;
         }
 
         .aba-btn.ativo {
@@ -97,132 +107,163 @@
             background: #eff6ff;
         }
 
-        .aba-btn:hover:not(.ativo) {
-            color: #374151;
-            background: #f3f4f6;
-        }
-
         .aba-conteudo {
             display: none;
+            animation: fade 0.2s ease;
         }
 
         .aba-conteudo.ativo {
             display: block;
         }
 
-        .acoes {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(6px);}
+            to { opacity: 1; transform: translateY(0);}
         }
 
-        .acoes button, .acoes input {
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
+        .acoes {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn-add {
             background: #2563eb;
             color: white;
             border: none;
-            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 40px;
             font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-add:hover {
+            background: #1d4ed8;
+        }
+
+        .busca-input {
+            padding: 12px 18px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+            width: 260px;
+            outline: none;
+            transition: 0.2s;
         }
 
         .clientes {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .card {
             background: white;
-            padding: 18px;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: 0.2s;
+            border: 1px solid #eef2ff;
             position: relative;
         }
 
         .card h3 {
-            margin-bottom: 10px;
-            color: #111827;
-            padding-right: 30px;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            padding-right: 50px;
+            color: #0f172a;
         }
 
         .card p {
-            margin: 6px 0;
-            font-size: 14px;
+            margin: 8px 0;
+            font-size: 0.85rem;
         }
 
         .card-actions {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 16px;
+            right: 16px;
             display: flex;
             gap: 8px;
         }
 
         .icon-btn {
-            background: none;
+            background: #f1f5f9;
             border: none;
             cursor: pointer;
-            font-size: 18px;
-            padding: 5px;
-            border-radius: 8px;
+            font-size: 16px;
+            padding: 6px 10px;
+            border-radius: 40px;
             transition: 0.2s;
         }
 
         .icon-btn:hover {
-            background: #f3f4f6;
+            background: #e2e8f0;
         }
 
-        .edit-btn {
-            color: #2563eb;
-        }
-
-        .delete-btn {
-            color: #ef4444;
-        }
-
-        .share-btn {
-            color: #10b981;
-        }
+        .edit-btn { color: #2563eb; }
+        .delete-btn { color: #ef4444; }
 
         .valor-devendo {
             color: #dc2626;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .valor-opcional {
-            color: #9ca3af;
-            font-size: 12px;
-            font-style: italic;
+            font-weight: 700;
+            font-size: 1rem;
         }
 
         .copiavel {
-            background: #f3f4f6;
-            padding: 8px 10px;
-            border-radius: 8px;
-            user-select: all;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-weight: 600;
             cursor: pointer;
+            border: 1px dashed #94a3b8;
+            transition: 0.1s;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin: 6px 0;
+        }
+
+        .codigo-badge {
+            background: #e0f2fe;
+            color: #0369a1;
             font-weight: bold;
-            color: #111827;
-            border: 1px dashed #9ca3af;
-            margin-bottom: 8px;
-            transition: 0.2s;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-bottom: 10px;
         }
 
-        .copiavel:active {
-            background: #e5e7eb;
+        .servicos-container {
+            margin-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
         }
 
-        .salvo-info {
-            margin-top: 8px;
-            font-size: 12px;
-            color: #10b981;
+        .servico-item {
+            background: #fef9e3;
+            padding: 8px 12px;
+            border-radius: 16px;
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .servico-item:hover {
+            background: #fef3c7;
+        }
+
+        .servico-texto {
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
         .modal {
@@ -232,48 +273,44 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             align-items: center;
             justify-content: center;
-            padding: 15px;
-            z-index: 20;
+            z-index: 1000;
+            padding: 20px;
         }
 
         .modal-content {
             background: white;
+            max-width: 520px;
             width: 100%;
-            max-width: 450px;
-            padding: 20px;
-            border-radius: 18px;
+            border-radius: 32px;
+            padding: 28px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-content h2 {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
-        .modal-content input, .modal-content textarea {
+        .modal-content input, .modal-content select, .modal-content textarea {
             width: 100%;
             padding: 12px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .modal-content textarea {
-            resize: vertical;
-            min-height: 100px;
-            font-family: Arial, sans-serif;
+            margin-bottom: 14px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
         }
 
         .salvar {
             width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
             background: #10b981;
             color: white;
-            font-size: 16px;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
             font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
             margin-top: 8px;
         }
@@ -283,44 +320,53 @@
             margin-top: 8px;
         }
 
-        .btn-whatsapp {
-            background: #25D366;
+        .grupo-servicos {
+            background: #f9fafb;
+            border-radius: 20px;
+            padding: 12px;
+            margin: 12px 0;
         }
 
-        .btn-email {
-            background: #3b5998;
+        .btn-add-servico {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 6px;
         }
 
-        .campo-opcional {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: -8px;
-            margin-bottom: 8px;
+        .lista-servicos-modal {
+            max-height: 180px;
+            overflow-y: auto;
+            margin-bottom: 10px;
         }
 
-        .botoes-share {
+        .servico-mini {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 30px;
+            margin-bottom: 6px;
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e2e8f0;
         }
 
-        .botoes-share button {
-            flex: 1;
+        .remover-servico {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 18px;
         }
 
         @media(max-width: 700px){
-            .topo {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .logo {
-                text-align: center;
-            }
-            .aba-btn {
-                flex: 1;
-                text-align: center;
-                padding: 10px;
-            }
+            .topo { flex-direction: column; }
+            .aba-btn { flex: 1; text-align: center; }
         }
     </style>
 </head>
@@ -328,9 +374,9 @@
 
 <header>
     <div class="topo">
-        <div class="logo">📋 APK Cliente PRO - DN</div>
+        <div class="logo">⚡ APK Cliente PRO - DN | Código & Serviços</div>
         <div class="pesquisa-cnpj">
-            <input type="text" id="cnpjBusca" placeholder="Pesquisar CNPJ (abrirá Receita)" />
+            <input type="text" id="cnpjBusca" placeholder="Pesquisar CNPJ (Receita Federal)" />
             <button onclick="buscarCNPJ()">🔍 Buscar</button>
         </div>
     </div>
@@ -338,430 +384,453 @@
 
 <div class="container">
     <div class="abas">
-        <button class="aba-btn ativo" onclick="trocarAba('lista')">📋 Lista de Clientes</button>
-        <button class="aba-btn" onclick="trocarAba('editar')">✏️ Editar Cliente</button>
+        <button class="aba-btn ativo" onclick="trocarAba('lista')">📋 Clientes + Serviços</button>
+        <button class="aba-btn" onclick="trocarAba('editar')">✏️ Edição Avançada</button>
+        <button class="aba-btn" onclick="trocarAba('servicosGlobal')">📦 Central de Serviços</button>
+        <button class="aba-btn" onclick="trocarAba('codigos')">🏷️ Códigos</button>
     </div>
 
+    <!-- ABA 1: Lista de Clientes com Código e Serviços vinculados -->
     <div id="abaLista" class="aba-conteudo ativo">
         <div class="acoes">
-            <button class="btn-add" onclick="abrirModal()">+ Adicionar Cliente</button>
-            <input type="text" id="buscaRapida" placeholder="🔎 Buscar cliente por nome, doc ou telefone..." onkeyup="filtrarClientes()" />
+            <button class="btn-add" onclick="abrirModalClienteNovo()">+ Adicionar Cliente</button>
+            <input type="text" id="buscaRapida" placeholder="🔎 Buscar por nome, documento, código..." class="busca-input" onkeyup="filtrarClientes()" />
         </div>
         <div class="clientes" id="listaClientes"></div>
     </div>
 
+    <!-- ABA 2: Edição tradicional inline (totalmente compatível e aprimorada) -->
     <div id="abaEditar" class="aba-conteudo">
         <div class="clientes" id="listaEdicao"></div>
     </div>
+
+    <!-- ABA 3: Central de Serviços (exibe todos serviços de todos clientes, pesquisável) -->
+    <div id="abaServicosGlobal" class="aba-conteudo">
+        <div class="acoes">
+            <input type="text" id="buscaServicoGlobal" placeholder="🔍 Buscar serviço por nome, cliente ou código..." class="busca-input" onkeyup="filtrarServicosGlobais()" />
+        </div>
+        <div id="globalServicosList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    
+    <!-- ABA 4: Códigos -->
+    <div id="abaCodigos" class="aba-conteudo">
+        <div class="acoes">
+            <input type="text" id="buscaCodigo" placeholder="🔍 Buscar código..." class="busca-input" onkeyup="filtrarCodigos()" />
+        </div>
+        <div class="clientes" id="listaCodigos"></div>
+    </div>
+
+</div>
 </div>
 
-<!-- Modal de Cadastro/Edição -->
+<!-- MODAL universal para cadastro/edição de cliente (com código fixo + serviços) -->
 <div id="modalCliente" class="modal">
     <div class="modal-content">
-        <h2 id="modalTitulo">📌 Cadastrar Cliente</h2>
+        <h2 id="modalTitulo">➕ Cliente + Código / Serviços</h2>
         <input type="text" id="nomeCliente" placeholder="Nome do Cliente *" />
         <input type="text" id="documentoCliente" placeholder="CPF ou CNPJ *" />
-        <input type="text" id="telefoneCliente" placeholder="Telefone (WhatsApp) - opcional" />
-        <div class="campo-opcional">* Campos obrigatórios | Telefone permite envio via WhatsApp</div>
-        <input type="number" step="0.01" id="valorCliente" placeholder="Valor (opcional - deixe em branco se não houver)" />
+        <input type="text" id="telefoneCliente" placeholder="Telefone (opcional)" />
+        <input type="text" id="codigoCliente" placeholder="Código único (ex: DN-001, CLT-10) *" />
+        <input type="number" step="0.01" id="valorCliente" placeholder="Valor Devido R$" />
         <input type="date" id="dataCliente" />
-        <button class="salvar" onclick="salvarCliente()">✅ Salvar Cliente</button>
-        <button class="salvar btn-cancelar" onclick="fecharModal()">❌ Cancelar</button>
-    </div>
-</div>
-
-<!-- Modal de Compartilhar -->
-<div id="modalCompartilhar" class="modal">
-    <div class="modal-content">
-        <h2>📤 Compartilhar Informações</h2>
-        <div id="mensagemPreview" style="background:#f3f4f6;padding:12px;border-radius:10px;margin-bottom:15px;font-size:14px;"></div>
-        <textarea id="mensagemPersonalizada" placeholder="Edite a mensagem antes de enviar..."></textarea>
-        <div class="botoes-share">
-            <button class="salvar btn-whatsapp" onclick="enviarWhatsApp()">📱 WhatsApp</button>
-            <button class="salvar btn-email" onclick="enviarEmail()">📧 E-mail</button>
+        
+        <div class="grupo-servicos">
+            <label><strong>📋 Serviços vinculados a este código:</strong></label>
+            <div id="listaServicosModal" class="lista-servicos-modal"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" id="novoServicoDesc" placeholder="Descrição do serviço" style="flex:1" />
+                <button class="btn-add-servico" onclick="adicionarServicoNaModal()">+ Adicionar</button>
+            </div>
+            <small style="color:#64748b;">Clique em qualquer serviço abaixo para copiar</small>
         </div>
-        <button class="salvar" onclick="copiarMensagem()">📋 Copiar Mensagem</button>
-        <button class="salvar btn-cancelar" onclick="fecharModalCompartilhar()">❌ Fechar</button>
+        
+        <button class="salvar" onclick="salvarClienteCompleto()">✅ Salvar Cliente</button>
+        <button class="salvar btn-cancelar" onclick="fecharModal()">Cancelar</button>
     </div>
 </div>
 
 <script>
-    const modal = document.getElementById('modalCliente');
-    const modalCompartilhar = document.getElementById('modalCompartilhar');
-    const listaClientes = document.getElementById('listaClientes');
-    const listaEdicao = document.getElementById('listaEdicao');
-    let clienteEditando = null;
-    let editandoIndex = null;
-    let clienteParaCompartilhar = null;
+    // ---------- Estrutura de dados ----------
+    let modalEditandoIndex = null;      // índice do cliente sendo editado
+    let servicosTemp = [];               // serviços temporários no modal
 
+    // Carregar dados
+    function carregarDados() {
+        const raw = localStorage.getItem('clientesDN_PRO_v2');
+        if (!raw) return [];
+        try {
+            return JSON.parse(raw);
+        } catch(e) { return []; }
+    }
+
+    function salvarDados(clientes) {
+        localStorage.setItem('clientesDN_PRO_v2', JSON.stringify(clientes));
+    }
+
+    // helpers
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+
+    function formatarDataBR(dataISO) {
+        if (!dataISO) return '';
+        const partes = dataISO.split('-');
+        if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        return dataISO;
+    }
+
+    // Abas
     function trocarAba(aba) {
         document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
+        document.getElementById('abaLista').classList.remove('ativo');
+        document.getElementById('abaEditar').classList.remove('ativo');
+        document.getElementById('abaServicosGlobal').classList.remove('ativo');
+        const abaCod=document.getElementById('abaCodigos'); if(abaCod) abaCod.classList.remove('ativo');
         if (aba === 'lista') {
             document.querySelector('.aba-btn:first-child').classList.add('ativo');
             document.getElementById('abaLista').classList.add('ativo');
-            document.getElementById('abaEditar').classList.remove('ativo');
             renderizarListaClientes();
-        } else {
-            document.querySelector('.aba-btn:last-child').classList.add('ativo');
+        } else if (aba === 'editar') {
+            document.querySelector('.aba-btn:nth-child(2)').classList.add('ativo');
             document.getElementById('abaEditar').classList.add('ativo');
-            document.getElementById('abaLista').classList.remove('ativo');
             renderizarListaEdicao();
-        }
-    }
-
-    function abrirModal(cliente = null, index = null) {
-        if (cliente) {
-            clienteEditando = cliente;
-            editandoIndex = index;
-            document.getElementById('modalTitulo').innerText = '✏️ Editar Cliente';
-            document.getElementById('nomeCliente').value = cliente.nome || '';
-            document.getElementById('documentoCliente').value = cliente.documento || '';
-            document.getElementById('telefoneCliente').value = cliente.telefone || '';
-            document.getElementById('valorCliente').value = cliente.valor || '';
-            document.getElementById('dataCliente').value = cliente.data || '';
+        } else if (aba === 'codigos') {
+            document.querySelector('.aba-btn:nth-child(4)').classList.add('ativo');
+            document.getElementById('abaCodigos').classList.add('ativo');
+            renderizarCodigos();
         } else {
-            clienteEditando = null;
-            editandoIndex = null;
-            document.getElementById('modalTitulo').innerText = '📌 Cadastrar Cliente';
-            document.getElementById('nomeCliente').value = '';
-            document.getElementById('documentoCliente').value = '';
-            document.getElementById('telefoneCliente').value = '';
-            document.getElementById('valorCliente').value = '';
-            document.getElementById('dataCliente').value = '';
+            document.querySelector('.aba-btn:nth-child(3)').classList.add('ativo');
+            document.getElementById('abaServicosGlobal').classList.add('ativo');
+            renderizarServicosGlobais();
         }
-        modal.style.display = 'flex';
     }
 
-    function fecharModal() {
-        modal.style.display = 'none';
-        clienteEditando = null;
-        editandoIndex = null;
+    // Modal limpo ou edição
+    function abrirModalClienteNovo() {
+        modalEditandoIndex = null;
+        document.getElementById('modalTitulo').innerText = '➕ Novo Cliente + Código';
+        document.getElementById('nomeCliente').value = '';
+        document.getElementById('documentoCliente').value = '';
+        document.getElementById('telefoneCliente').value = '';
+        document.getElementById('valorCliente').value = '';
+        document.getElementById('dataCliente').value = new Date().toISOString().slice(0,10);
+        document.getElementById('codigoCliente').value = '';
+        servicosTemp = [];
+        atualizarListaServicosModal();
+        document.getElementById('modalCliente').style.display = 'flex';
     }
 
-    function abrirModalCompartilhar(cliente) {
-        clienteParaCompartilhar = cliente;
-        const mensagem = gerarMensagem(cliente);
-        document.getElementById('mensagemPreview').innerHTML = mensagem.replace(/\n/g, '<br>');
-        document.getElementById('mensagemPersonalizada').value = mensagem;
-        modalCompartilhar.style.display = 'flex';
+    function abrirModalEditarCliente(index) {
+        const clientes = carregarDados();
+        const c = clientes[index];
+        if (!c) return;
+        modalEditandoIndex = index;
+        document.getElementById('modalTitulo').innerText = '✏️ Editar Cliente + Serviços';
+        document.getElementById('nomeCliente').value = c.nome || '';
+        document.getElementById('documentoCliente').value = c.documento || '';
+        document.getElementById('telefoneCliente').value = c.telefone || '';
+        document.getElementById('valorCliente').value = c.valor || '0';
+        document.getElementById('dataCliente').value = c.data || new Date().toISOString().slice(0,10);
+        document.getElementById('codigoCliente').value = c.codigo || '';
+        servicosTemp = Array.isArray(c.servicos) ? [...c.servicos] : [];
+        atualizarListaServicosModal();
+        document.getElementById('modalCliente').style.display = 'flex';
     }
 
-    function fecharModalCompartilhar() {
-        modalCompartilhar.style.display = 'none';
-        clienteParaCompartilhar = null;
+    function adicionarServicoNaModal() {
+        const desc = document.getElementById('novoServicoDesc').value.trim();
+        if (desc === '') { alert('Digite a descrição do serviço'); return; }
+        servicosTemp.push({ descricao: desc });
+        document.getElementById('novoServicoDesc').value = '';
+        atualizarListaServicosModal();
     }
 
-    function gerarMensagem(cliente) {
-        const valorFormatado = cliente.valor && parseFloat(cliente.valor) !== 0 ? 
-            new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseFloat(cliente.valor)) : 
-            'Não informado';
-        const dataFormatada = formatarDataParaExibir(cliente.data);
-        const nomeEmpresa = "APK Cliente PRO - DN";
-        
-        let mensagem = `🏢 *${nomeEmpresa}*\n\n`;
-        mensagem += `Olá *${cliente.nome}*, tudo bem?\n\n`;
-        mensagem += `📋 *Informações:*\n`;
-        mensagem += `━━━━━━━━━━━━━━━━━━━━\n`;
-        mensagem += `📌 *Cliente:* ${cliente.nome}\n`;
-        mensagem += `📄 *Documento:* ${cliente.documento}\n`;
-        if (cliente.telefone) {
-            mensagem += `📞 *Telefone:* ${cliente.telefone}\n`;
-        }
-        mensagem += `💰 *Valor:* ${valorFormatado}\n`;
-        mensagem += `📅 *Data:* ${dataFormatada}\n`;
-        mensagem += `━━━━━━━━━━━━━━━━━━━━\n\n`;
-        mensagem += `🔹 *Informações adicionais:*\n\n`;
-        mensagem += `📲 *Entre em contato para mais detalhes.*\n\n`;
-        mensagem += `Agradecemos a atenção! 🙏`;
-        
-        return mensagem;
+    function removerServicoModal(indice) {
+        servicosTemp.splice(indice, 1);
+        atualizarListaServicosModal();
     }
 
-    function enviarWhatsApp() {
-        if (!clienteParaCompartilhar) return;
-        
-        let telefone = clienteParaCompartilhar.telefone;
-        if (!telefone) {
-            alert('⚠️ Este cliente não possui telefone cadastrado. Adicione um telefone para enviar mensagem via WhatsApp.');
+    function atualizarListaServicosModal() {
+        const container = document.getElementById('listaServicosModal');
+        if (!container) return;
+        if (servicosTemp.length === 0) {
+            container.innerHTML = '<div style="font-size:13px; color:#94a3b8; text-align:center;">Nenhum serviço adicionado.</div>';
             return;
         }
-        
-        telefone = telefone.replace(/\D/g, '');
-        if (telefone.length < 10) {
-            alert('⚠️ Número de telefone inválido. Use o formato (DD) 99999-9999');
-            return;
-        }
-        
-        if (!telefone.startsWith('55')) {
-            telefone = '55' + telefone;
-        }
-        
-        const mensagem = document.getElementById('mensagemPersonalizada').value;
-        const mensagemCodificada = encodeURIComponent(mensagem);
-        const url = `https://wa.me/${telefone}?text=${mensagemCodificada}`;
-        window.open(url, '_blank');
-    }
-
-    function enviarEmail() {
-        if (!clienteParaCompartilhar) return;
-        
-        const mensagem = document.getElementById('mensagemPersonalizada').value;
-        const assunto = encodeURIComponent(`Informações - ${clienteParaCompartilhar.nome}`);
-        const corpo = encodeURIComponent(mensagem);
-        const url = `mailto:?subject=${assunto}&body=${corpo}`;
-        window.open(url, '_blank');
-    }
-
-    function copiarMensagem() {
-        const mensagem = document.getElementById('mensagemPersonalizada').value;
-        navigator.clipboard.writeText(mensagem).then(() => {
-            alert('✅ Mensagem copiada para a área de transferência!');
-        }).catch(() => {
-            alert('⚠️ Não foi possível copiar a mensagem');
+        container.innerHTML = '';
+        servicosTemp.forEach((serv, idx) => {
+            const div = document.createElement('div');
+            div.className = 'servico-mini';
+            div.innerHTML = `
+                <span style="cursor:pointer; flex:1;" onclick="copiarTexto('${escapeHTML(serv.descricao)}')">📌 ${escapeHTML(serv.descricao)}</span>
+                <button class="remover-servico" onclick="removerServicoModal(${idx})">✖</button>
+            `;
+            container.appendChild(div);
         });
     }
 
-    window.onclick = function(e) {
-        if (e.target === modal) {
-            fecharModal();
-        }
-        if (e.target === modalCompartilhar) {
-            fecharModalCompartilhar();
-        }
-    }
-
-    function salvarCliente() {
+    function salvarClienteCompleto() {
         const nome = document.getElementById('nomeCliente').value.trim();
         const documento = document.getElementById('documentoCliente').value.trim();
         const telefone = document.getElementById('telefoneCliente').value.trim();
         let valor = document.getElementById('valorCliente').value;
         let data = document.getElementById('dataCliente').value;
+        let codigo = document.getElementById('codigoCliente').value.trim();
 
-        if (nome === '' || documento === '') {
-            alert('❌ Preencha os campos obrigatórios: Nome e Documento');
-            return;
-        }
-
+        if (nome === '' || documento === '') { alert('Nome e documento são obrigatórios'); return; }
+        if (codigo === '') { alert('O campo CÓDIGO é obrigatório (ex: DN-001, CLIENTE10)'); return; }
         if (valor === '') valor = '0';
-        const dataAtual = new Date().toISOString().slice(0,10);
-        if (data === '') data = dataAtual;
+        if (data === '') data = new Date().toISOString().slice(0,10);
 
         let clientes = carregarDados();
+        const novoObj = {
+            nome: nome,
+            documento: documento,
+            telefone: telefone,
+            valor: valor,
+            data: data,
+            codigo: codigo,
+            servicos: [...servicosTemp]   // salva lista de serviços
+        };
 
-        if (clienteEditando && editandoIndex !== null) {
-            clientes[editandoIndex] = {
-                nome: nome,
-                documento: documento,
-                telefone: telefone,
-                valor: valor,
-                data: data
-            };
+        if (modalEditandoIndex !== null && clientes[modalEditandoIndex]) {
+            clientes[modalEditandoIndex] = novoObj;
             alert('✅ Cliente atualizado com sucesso!');
         } else {
-            clientes.push({
-                nome: nome,
-                documento: documento,
-                telefone: telefone,
-                valor: valor,
-                data: data
-            });
-            alert('✅ Cliente cadastrado com sucesso!');
+            clientes.push(novoObj);
+            alert('✅ Cliente cadastrado com serviços!');
         }
-
         salvarDados(clientes);
         fecharModal();
         renderizarListaClientes();
         renderizarListaEdicao();
+        renderizarServicosGlobais();
     }
 
+    function fecharModal() {
+        document.getElementById('modalCliente').style.display = 'none';
+        modalEditandoIndex = null;
+        servicosTemp = [];
+    }
+
+    // Render principal: cards com código clicável + serviços copiáveis
     function renderizarListaClientes() {
         const clientes = carregarDados();
+        const container = document.getElementById('listaClientes');
         if (clientes.length === 0) {
-            listaClientes.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nenhum cliente cadastrado. Clique em "+ Adicionar Cliente" para começar.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:40px;">➕ Nenhum cliente. Clique em "Adicionar Cliente"</div>';
             return;
         }
-
-        listaClientes.innerHTML = '';
-        clientes.forEach((cliente, index) => {
-            const valorFormatado = cliente.valor && parseFloat(cliente.valor) !== 0 ? 
-                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseFloat(cliente.valor)) : 
-                'Não informado';
+        container.innerHTML = '';
+        clientes.forEach((cliente, idx) => {
             const card = document.createElement('div');
-            card.classList.add('card');
+            card.className = 'card';
+            const codigoExibido = cliente.codigo || 'SEM CÓDIGO';
+            const servicosLista = Array.isArray(cliente.servicos) && cliente.servicos.length ? cliente.servicos : [];
+            let servicosHtml = '';
+            if (servicosLista.length) {
+                servicosHtml = `<div class="servicos-container"><strong>📌 Serviços (clique para copiar):</strong>`;
+                servicosLista.forEach((serv, sIdx) => {
+                    servicosHtml += `<div class="servico-item" onclick="copiarTexto('${escapeHTML(serv.descricao)}')">
+                                        <span class="servico-texto">🔹 ${escapeHTML(serv.descricao)}</span>
+                                        <span style="font-size:12px;">📋 copiar</span>
+                                     </div>`;
+                });
+                servicosHtml += `</div>`;
+            } else {
+                servicosHtml = `<div class="servicos-container"><em style="font-size:12px;">Nenhum serviço associado</em></div>`;
+            }
+
             card.innerHTML = `
                 <div class="card-actions">
-                    <button class="icon-btn share-btn" onclick="abrirModalCompartilharClientes(${index})" title="Compartilhar">📤</button>
-                    <button class="icon-btn edit-btn" onclick="abrirModalClienteIndex(${index})" title="Editar">✏️</button>
-                    <button class="icon-btn delete-btn" onclick="removerCliente(${index})" title="Remover">🗑️</button>
+                    <button class="icon-btn edit-btn" onclick="abrirModalEditarCliente(${idx})">✏️</button>
+                    <button class="icon-btn delete-btn" onclick="removerCliente(${idx})">🗑️</button>
                 </div>
                 <h3>${escapeHTML(cliente.nome)}</h3>
-                <p><strong>CNPJ/CPF:</strong></p>
-                <div class="copiavel" onclick="copiarDocumento('${escapeHTML(cliente.documento)}')">${escapeHTML(cliente.documento)}</div>
-                ${cliente.telefone ? `<p><strong>Telefone:</strong> ${escapeHTML(cliente.telefone)}</p>` : '<p><em>Telefone não informado</em></p>'}
-                <p class="${parseFloat(cliente.valor) !== 0 ? 'valor-devendo' : 'valor-opcional'}"><strong>Valor:</strong> ${valorFormatado}</p>
-                <p><strong>Data:</strong> ${formatarDataParaExibir(cliente.data)}</p>
-                <button class="salvar" style="margin-top:10px;background:#10b981;" onclick="abrirModalCompartilharClientes(${index})">📤 Compartilhar</button>
-                <div class="salvo-info">✔ Dados salvos automaticamente</div>
+                <div><span class="codigo-badge">🏷️ CÓDIGO:</span> 
+                    <div class="copiavel" onclick="copiarTexto('${escapeHTML(codigoExibido)}')">${escapeHTML(codigoExibido)}</div>
+                </div>
+                <p><strong>📄 Documento:</strong></p>
+                <div class="copiavel" onclick="copiarTexto('${escapeHTML(cliente.documento)}')">${escapeHTML(cliente.documento)}</div>
+                ${cliente.telefone ? `<p><strong>📞 Telefone:</strong> ${escapeHTML(cliente.telefone)}</p>` : '<p><em>Telefone opcional</em></p>'}
+                <p class="valor-devendo"><strong>💰 Valor Devido:</strong> R$ ${parseFloat(cliente.valor).toFixed(2)}</p>
+                <p><strong>📅 Atualização:</strong> ${formatarDataBR(cliente.data)}</p>
+                ${servicosHtml}
+                <div class="salvo-info" style="font-size:11px; margin-top:8px;">✅ Dados locais</div>
             `;
-            listaClientes.appendChild(card);
+            container.appendChild(card);
         });
     }
 
-    function abrirModalCompartilharClientes(index) {
-        const clientes = carregarDados();
-        abrirModalCompartilhar(clientes[index]);
-    }
-
+    // Aba de edição inline (mesmo esquema tradicional adaptado com código e serviços)
     function renderizarListaEdicao() {
         const clientes = carregarDados();
-        if (clientes.length === 0) {
-            listaEdicao.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nenhum cliente cadastrado. Vá para a aba "Lista de Clientes" e adicione um cliente.</div>';
+        const container = document.getElementById('listaEdicao');
+        if (!clientes.length) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;">Nenhum cliente cadastrado.</div>';
             return;
         }
-
-        listaEdicao.innerHTML = '';
-        clientes.forEach((cliente, index) => {
+        container.innerHTML = '';
+        clientes.forEach((cliente, idx) => {
             const card = document.createElement('div');
-            card.classList.add('card');
+            card.className = 'card';
             card.innerHTML = `
                 <h3>✏️ Editando: ${escapeHTML(cliente.nome)}</h3>
-                <div style="margin-top:15px;">
-                    <label><strong>Nome:</strong></label>
-                    <input type="text" id="edit_nome_${index}" value="${escapeHTML(cliente.nome)}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
-                    
-                    <label><strong>Documento:</strong></label>
-                    <input type="text" id="edit_doc_${index}" value="${escapeHTML(cliente.documento)}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
-                    
-                    <label><strong>Telefone (WhatsApp):</strong></label>
-                    <input type="text" id="edit_tel_${index}" value="${escapeHTML(cliente.telefone)}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
-                    
-                    <label><strong>Valor (opcional):</strong></label>
-                    <input type="number" step="0.01" id="edit_valor_${index}" value="${cliente.valor && parseFloat(cliente.valor) !== 0 ? parseFloat(cliente.valor).toFixed(2) : ''}" placeholder="Deixe em branco se não houver valor" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
-                    
-                    <label><strong>Data:</strong></label>
-                    <input type="date" id="edit_data_${index}" value="${cliente.data}" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:8px 0;" />
-                    
-                    <button class="salvar" style="margin-top:10px;" onclick="salvarEdicaoInline(${index})">💾 Salvar Alterações</button>
-                    <button class="salvar btn-cancelar" style="margin-top:8px;" onclick="removerCliente(${index})">🗑️ Remover Cliente</button>
+                <div style="margin-top:12px;">
+                    <label>Nome:</label><input type="text" id="edit_nome_${idx}" value="${escapeHTML(cliente.nome)}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
+                    <label>Documento:</label><input type="text" id="edit_doc_${idx}" value="${escapeHTML(cliente.documento)}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
+                    <label>Telefone:</label><input type="text" id="edit_tel_${idx}" value="${escapeHTML(cliente.telefone)}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
+                    <label>Código (único):</label><input type="text" id="edit_codigo_${idx}" value="${escapeHTML(cliente.codigo || '')}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
+                    <label>Valor Devido:</label><input type="number" step="0.01" id="edit_valor_${idx}" value="${parseFloat(cliente.valor).toFixed(2)}" style="width:100%; margin-bottom:8px;">
+                    <label>Data:</label><input type="date" id="edit_data_${idx}" value="${cliente.data}" style="width:100%; margin-bottom:12px;">
+                    <label>Serviços (separados por ponto e vírgula):</label>
+                    <input type="text" id="edit_servicos_${idx}" value="${escapeHTML((cliente.servicos || []).map(s=>s.descricao).join('; '))}" style="width:100%; margin-bottom:12px;" placeholder="ex: Consultoria; Suporte Técnico">
+                    <button class="salvar" onclick="salvarEdicaoInline(${idx})">💾 Salvar Alterações</button>
+                    <button class="salvar btn-cancelar" onclick="removerCliente(${idx})">🗑️ Remover</button>
                 </div>
             `;
-            listaEdicao.appendChild(card);
+            container.appendChild(card);
         });
     }
 
-    function salvarEdicaoInline(index) {
-        const nome = document.getElementById(`edit_nome_${index}`).value.trim();
-        const documento = document.getElementById(`edit_doc_${index}`).value.trim();
-        const telefone = document.getElementById(`edit_tel_${index}`).value.trim();
-        let valor = document.getElementById(`edit_valor_${index}`).value;
-        const data = document.getElementById(`edit_data_${index}`).value;
-
-        if (nome === '' || documento === '') {
-            alert('❌ Nome e Documento são obrigatórios!');
-            return;
-        }
-
-        if (valor === '') valor = '0';
-        
+    function salvarEdicaoInline(idx) {
+        const nome = document.getElementById(`edit_nome_${idx}`).value.trim();
+        const documento = document.getElementById(`edit_doc_${idx}`).value.trim();
+        const telefone = document.getElementById(`edit_tel_${idx}`).value.trim();
+        const codigo = document.getElementById(`edit_codigo_${idx}`).value.trim();
+        const valor = document.getElementById(`edit_valor_${idx}`).value;
+        const data = document.getElementById(`edit_data_${idx}`).value;
+        const servicosRaw = document.getElementById(`edit_servicos_${idx}`).value;
+        if (nome === '' || documento === '') { alert('Nome e documento obrigatórios'); return; }
+        if (codigo === '') { alert('Código é obrigatório'); return; }
+        const servicosArr = servicosRaw.split(';').map(s => s.trim()).filter(s => s !== '').map(desc => ({ descricao: desc }));
         let clientes = carregarDados();
-        clientes[index] = {
-            nome: nome,
-            documento: documento,
-            telefone: telefone,
-            valor: valor || '0',
-            data: data || new Date().toISOString().slice(0,10)
-        };
-        salvarDados(clientes);
-        alert('✅ Cliente atualizado com sucesso!');
-        renderizarListaClientes();
-        renderizarListaEdicao();
+        if (clientes[idx]) {
+            clientes[idx] = {
+                nome, documento, telefone, codigo,
+                valor: valor || '0',
+                data: data || new Date().toISOString().slice(0,10),
+                servicos: servicosArr
+            };
+            salvarDados(clientes);
+            alert('Atualizado com sucesso!');
+            renderizarListaClientes();
+            renderizarListaEdicao();
+            renderizarServicosGlobais();
+        }
     }
 
-    function abrirModalClienteIndex(index) {
-        const clientes = carregarDados();
-        abrirModal(clientes[index], index);
-    }
-
-    function removerCliente(index) {
-        if (confirm('⚠️ Tem certeza que deseja remover este cliente permanentemente?')) {
+    function removerCliente(idx) {
+        if (confirm('Remover cliente permanentemente?')) {
             let clientes = carregarDados();
-            clientes.splice(index, 1);
+            clientes.splice(idx, 1);
             salvarDados(clientes);
             renderizarListaClientes();
             renderizarListaEdicao();
-            alert('🗑️ Cliente removido com sucesso!');
+            renderizarServicosGlobais();
         }
     }
 
     function filtrarClientes() {
-        const filtro = document.getElementById('buscaRapida').value.toLowerCase();
+        const termo = document.getElementById('buscaRapida').value.toLowerCase();
         const cards = document.querySelectorAll('#listaClientes .card');
+        cards.forEach(card => {
+            const texto = card.innerText.toLowerCase();
+            card.style.display = texto.includes(termo) ? 'block' : 'none';
+        });
+    }
+
+    function copiarTexto(texto) {
+        navigator.clipboard.writeText(texto).then(() => alert(`Copiado: ${texto}`)).catch(() => alert('Erro ao copiar'));
+    }
+
+    // Central de serviços global
+    function renderizarServicosGlobais() {
+        const clientes = carregarDados();
+        const container = document.getElementById('globalServicosList');
+        let itens = [];
+        clientes.forEach(cli => {
+            const cod = cli.codigo || '---';
+            const servicosArr = cli.servicos || [];
+            servicosArr.forEach(serv => {
+                itens.push({
+                    clienteNome: cli.nome,
+                    codigo: cod,
+                    servicoDesc: serv.descricao
+                });
+            });
+        });
+        if (itens.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;">📭 Nenhum serviço cadastrado ainda. Adicione serviços nos clientes.</div>';
+            return;
+        }
+        container.innerHTML = '';
+        itens.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.style.cursor = 'pointer';
+            div.innerHTML = `
+                <div class="copiavel" onclick="copiarTexto('${escapeHTML(item.servicoDesc)}')">
+                    📋 ${escapeHTML(item.servicoDesc)}
+                </div>
+                <p><strong>Cliente:</strong> ${escapeHTML(item.clienteNome)} | <strong>Código:</strong> ${escapeHTML(item.codigo)}</p>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function filtrarServicosGlobais() {
+        const filtro = document.getElementById('buscaServicoGlobal').value.toLowerCase();
+        const cards = document.querySelectorAll('#globalServicosList .card');
         cards.forEach(card => {
             const texto = card.innerText.toLowerCase();
             card.style.display = texto.includes(filtro) ? 'block' : 'none';
         });
     }
 
-    function copiarDocumento(doc) {
-        navigator.clipboard.writeText(doc).then(() => {
-            alert('📋 Documento copiado: ' + doc);
-        }).catch(() => {
-            alert('⚠️ Não foi possível copiar');
-        });
-    }
-
-    function carregarDados() {
-        const dadosRaw = localStorage.getItem('clientesDN_PRO');
-        if (!dadosRaw) return [];
-        try {
-            return JSON.parse(dadosRaw);
-        } catch(e) {
-            return [];
-        }
-    }
-
-    function salvarDados(clientes) {
-        localStorage.setItem('clientesDN_PRO', JSON.stringify(clientes));
-    }
-
-    function formatarDataParaExibir(data) {
-        if (!data) return '';
-        if (data.includes('-')) {
-            const partes = data.split('-');
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
-        return data;
-    }
-
-    function escapeHTML(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
     function buscarCNPJ() {
         let cnpj = document.getElementById('cnpjBusca').value.trim();
-        if (cnpj === '') {
-            alert('Digite um CNPJ válido para consulta');
-            return;
-        }
+        if (cnpj === '') { alert('Digite um CNPJ'); return; }
         cnpj = cnpj.replace(/\D/g, '');
-        if (cnpj.length !== 14) {
-            alert('CNPJ deve ter 14 números. Use apenas números ou formatação.');
-            return;
-        }
-        const url = `https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${cnpj}`;
-        window.open(url, '_blank');
+        if (cnpj.length !== 14) { alert('CNPJ inválido (14 dígitos)'); return; }
+        window.open(`https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${cnpj}`, '_blank');
     }
 
-    function init() {
-        renderizarListaClientes();
+    window.onclick = function(e) { if (e.target === document.getElementById('modalCliente')) fecharModal(); };
+
+    function renderizarCodigos() {
+        const clientes = carregarDados();
+        const container = document.getElementById('listaCodigos');
+        if(!container) return;
+        container.innerHTML='';
+
+        clientes.forEach(cliente=>{
+            const card=document.createElement('div');
+            card.className='card';
+
+            let servicos='';
+            (cliente.servicos || []).forEach(serv=>{
+                servicos += `<div class="servico-item" onclick="copiarTexto('${serv.descricao}')">${serv.descricao}</div>`;
+            });
+
+            card.innerHTML=`
+                <h3>${cliente.codigo || 'SEM CÓDIGO'}</h3>
+                <div class="copiavel" onclick="copiarTexto('${cliente.codigo || ''}')">${cliente.codigo || ''}</div>
+                ${servicos || '<em>Nenhum serviço vinculado</em>'}
+            `;
+
+            container.appendChild(card);
+        });
     }
 
+    function filtrarCodigos(){
+        const termo=document.getElementById('buscaCodigo').value.toLowerCase();
+        document.querySelectorAll('#listaCodigos .card').forEach(card=>{
+            card.style.display = card.innerText.toLowerCase().includes(termo) ? 'block' : 'none';
+        });
+    }
+
+    function init() { renderizarListaClientes(); renderizarServicosGlobais(); }
     init();
 </script>
 </body>
