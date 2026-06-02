@@ -390,28 +390,28 @@
         <button class="aba-btn" onclick="trocarAba('codigos')">🏷️ Códigos</button>
     </div>
 
-    <!-- ABA 1: Lista de Clientes com Código e Serviços vinculados -->
     <div id="abaLista" class="aba-conteudo ativo">
         <div class="acoes">
             <button class="btn-add" onclick="abrirModalClienteNovo()">+ Adicionar Cliente</button>
+            <button class="btn-add" style="background: #10b981;" onclick="exportarCSV()">📥 Exportar CSV</button>
+            <button class="btn-add" style="background: #f59e0b;" onclick="acionarImportacao()">📤 Importar CSV</button>
+            <input type="file" id="inputImportarCSV" accept=".csv" style="display: none;" onchange="importarCSV(event)" />
             <input type="text" id="buscaRapida" placeholder="🔎 Buscar por nome, documento, código..." class="busca-input" onkeyup="filtrarClientes()" />
         </div>
         <div class="clientes" id="listaClientes"></div>
     </div>
 
-    <!-- ABA 2: Edição tradicional inline (totalmente compatível e aprimorada) -->
     <div id="abaEditar" class="aba-conteudo">
         <div class="clientes" id="listaEdicao"></div>
     </div>
 
-    <!-- ABA 3: Central de Serviços (exibe todos serviços de todos clientes, pesquisável) -->
     <div id="abaServicosGlobal" class="aba-conteudo">
         <div class="acoes">
             <input type="text" id="buscaServicoGlobal" placeholder="🔍 Buscar serviço por nome, cliente ou código..." class="busca-input" onkeyup="filtrarServicosGlobais()" />
         </div>
         <div id="globalServicosList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </div>
     
-    <!-- ABA 4: Códigos -->
     <div id="abaCodigos" class="aba-conteudo">
         <div class="acoes">
             <input type="text" id="buscaCodigo" placeholder="🔍 Buscar código..." class="busca-input" onkeyup="filtrarCodigos()" />
@@ -420,9 +420,7 @@
     </div>
 
 </div>
-</div>
 
-<!-- MODAL universal para cadastro/edição de cliente (com código fixo + serviços) -->
 <div id="modalCliente" class="modal">
     <div class="modal-content">
         <h2 id="modalTitulo">➕ Cliente + Código / Serviços</h2>
@@ -810,12 +808,12 @@
 
             let servicos='';
             (cliente.servicos || []).forEach(serv=>{
-                servicos += `<div class="servico-item" onclick="copiarTexto('${serv.descricao}')">${serv.descricao}</div>`;
+                servicos += `<div class="servico-item" onclick="copiarTexto('${escapeHTML(serv.descricao)}')">${escapeHTML(serv.descricao)}</div>`;
             });
 
             card.innerHTML=`
-                <h3>${cliente.codigo || 'SEM CÓDIGO'}</h3>
-                <div class="copiavel" onclick="copiarTexto('${cliente.codigo || ''}')">${cliente.codigo || ''}</div>
+                <h3>${escapeHTML(cliente.codigo || 'SEM CÓDIGO')}</h3>
+                <div class="copiavel" onclick="copiarTexto('${escapeHTML(cliente.codigo || '')}')">${escapeHTML(cliente.codigo || '')}</div>
                 ${servicos || '<em>Nenhum serviço vinculado</em>'}
             `;
 
@@ -828,6 +826,109 @@
         document.querySelectorAll('#listaCodigos .card').forEach(card=>{
             card.style.display = card.innerText.toLowerCase().includes(termo) ? 'block' : 'none';
         });
+    }
+
+    // ---------- NOVAS FUNÇÕES DE EXPORTAR/IMPORTAR CSV ----------
+
+    function exportarCSV() {
+        const clientes = carregarDados();
+        if (clientes.length === 0) {
+            alert('Nenhum dado para exportar.');
+            return;
+        }
+        
+        let csvContent = "Nome;Documento;Telefone;Codigo;Valor;Data;Servicos\n";
+        
+        clientes.forEach(c => {
+            // Unimos os serviços usando a barra vertical "|" para não quebrar as colunas do CSV
+            const servicosStr = (c.servicos || []).map(s => s.descricao.replace(/;/g, ',')).join('|');
+            
+            const row = [
+                c.nome || '',
+                c.documento || '',
+                c.telefone || '',
+                c.codigo || '',
+                c.valor || '0',
+                c.data || '',
+                servicosStr
+            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';'); // Tratamento para formatar corretamente e evitar quebra
+            
+            csvContent += row + "\n";
+        });
+
+        // O Uint8Array com o BOM garante que o Excel do Brasil leia os acentos corretamente
+        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'backup_clientes_pro.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    function acionarImportacao() {
+        document.getElementById('inputImportarCSV').click();
+    }
+
+    function importarCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const rows = text.split('\n').map(r => r.trim()).filter(r => r);
+            
+            if (rows.length < 2) {
+                alert('Arquivo vazio ou formato inválido.');
+                return;
+            }
+
+            const novosClientes = [];
+            
+            // Pula a primeira linha (cabeçalho)
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                // Expressão regular para separar por ; ignorando os que estão dentro de aspas duplas
+                const cols = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').replace(/""/g, '"'));
+
+                if (cols.length >= 6) {
+                    const servicosStr = cols[6] || '';
+                    const servicosArr = servicosStr ? servicosStr.split('|').map(s => ({ descricao: s.trim() })).filter(s => s.descricao) : [];
+
+                    novosClientes.push({
+                        nome: cols[0],
+                        documento: cols[1],
+                        telefone: cols[2],
+                        codigo: cols[3],
+                        valor: cols[4],
+                        data: cols[5],
+                        servicos: servicosArr
+                    });
+                }
+            }
+
+            if (novosClientes.length > 0) {
+                if(confirm(`Foram encontrados ${novosClientes.length} clientes no arquivo CSV.\n\nClique em OK para SUBSTITUIR todos os seus dados atuais por estes.\nClique em CANCELAR para apenas ADICIONAR os arquivos aos clientes que você já tem cadastrado.`)) {
+                    salvarDados(novosClientes);
+                } else {
+                    const atuais = carregarDados();
+                    salvarDados(atuais.concat(novosClientes));
+                }
+                alert('✅ Importação concluída com sucesso!');
+                renderizarListaClientes();
+                renderizarListaEdicao();
+                renderizarServicosGlobais();
+                const abaCod = document.getElementById('abaCodigos'); 
+                if(abaCod && abaCod.classList.contains('ativo')) renderizarCodigos();
+            } else {
+                alert('❌ Nenhum dado válido encontrado para importar.');
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = ''; // Reseta o input para permitir importar o mesmo arquivo novamente se necessário
     }
 
     function init() { renderizarListaClientes(); renderizarServicosGlobais(); }
