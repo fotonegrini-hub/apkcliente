@@ -10,11 +10,99 @@
             padding: 0;
             box-sizing: border-box;
             font-family: system-ui, 'Segoe UI', Arial, sans-serif;
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
         }
 
+        /* Tema Claro (padrão) */
         body {
             background: #f5f7fb;
             color: #1e293b;
+        }
+
+        body.tema-escuro {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        body.tema-escuro header {
+            background: #020617;
+            border-bottom: 1px solid #334155;
+        }
+
+        body.tema-escuro .card {
+            background: #1e293b;
+            border-color: #334155;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        body.tema-escuro .card h3 {
+            color: #f1f5f9;
+        }
+
+        body.tema-escuro .copiavel {
+            background: #0f172a;
+            border-color: #475569;
+            color: #94a3b8;
+        }
+
+        body.tema-escuro .servico-item {
+            background: #334155;
+        }
+
+        body.tema-escuro .servico-item:hover {
+            background: #475569;
+        }
+
+        body.tema-escuro .aba-btn {
+            color: #94a3b8;
+        }
+
+        body.tema-escuro .aba-btn.ativo {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
+            background: #1e293b;
+        }
+
+        body.tema-escuro .busca-input,
+        body.tema-escuro .pesquisa-cnpj input {
+            background: #1e293b;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        body.tema-escuro .modal-content {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        body.tema-escuro .modal-content input,
+        body.tema-escuro .modal-content select,
+        body.tema-escuro .modal-content textarea {
+            background: #0f172a;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        body.tema-escuro .grupo-servicos {
+            background: #0f172a;
+        }
+
+        body.tema-escuro .servico-mini {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        body.tema-escuro .icon-btn {
+            background: #334155;
+        }
+
+        body.tema-escuro .icon-btn:hover {
+            background: #475569;
+        }
+
+        body.tema-escuro .codigo-badge {
+            background: #1e3a5f;
+            color: #93c5fd;
         }
 
         header {
@@ -74,13 +162,27 @@
             background: #059669;
         }
 
+        .btn-tema {
+            background: #475569;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.2s;
+        }
+
+        .btn-tema:hover {
+            background: #64748b;
+            transform: scale(1.05);
+        }
+
         .container {
             padding: 20px;
             max-width: 1300px;
             margin: auto;
         }
 
-        /* Abas principal */
         .abas {
             display: flex;
             gap: 6px;
@@ -211,6 +313,10 @@
             color: #dc2626;
             font-weight: 700;
             font-size: 1rem;
+        }
+
+        body.tema-escuro .valor-devendo {
+            color: #f87171;
         }
 
         .copiavel {
@@ -364,6 +470,17 @@
             font-size: 18px;
         }
 
+        .loading-cnpj {
+            display: none;
+            font-size: 12px;
+            color: #10b981;
+            margin-left: 10px;
+        }
+
+        body.tema-escuro .loading-cnpj {
+            color: #34d399;
+        }
+
         @media(max-width: 700px){
             .topo { flex-direction: column; }
             .aba-btn { flex: 1; text-align: center; }
@@ -375,9 +492,12 @@
 <header>
     <div class="topo">
         <div class="logo">⚡ APK Cliente PRO - DN | Código & Serviços</div>
-        <div class="pesquisa-cnpj">
-            <input type="text" id="cnpjBusca" placeholder="Pesquisar CNPJ (Receita Federal)" />
-            <button onclick="buscarCNPJ()">🔍 Buscar</button>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="btn-tema" onclick="alternarTema()" id="btnTema">🌙</button>
+            <div class="pesquisa-cnpj">
+                <input type="text" id="cnpjBusca" placeholder="Pesquisar CNPJ (API automática)" />
+                <button onclick="buscarCNPJAutomatico()">🔍 Buscar</button>
+            </div>
         </div>
     </div>
 </header>
@@ -447,11 +567,101 @@
 </div>
 
 <script>
-    // ---------- Estrutura de dados ----------
-    let modalEditandoIndex = null;      // índice do cliente sendo editado
-    let servicosTemp = [];               // serviços temporários no modal
+    // ---------- Tema Claro/Escuro ----------
+    function alternarTema() {
+        const body = document.body;
+        const btn = document.getElementById('btnTema');
+        
+        if (body.classList.contains('tema-escuro')) {
+            body.classList.remove('tema-escuro');
+            localStorage.setItem('tema', 'claro');
+            btn.innerHTML = '🌙';
+        } else {
+            body.classList.add('tema-escuro');
+            localStorage.setItem('tema', 'escuro');
+            btn.innerHTML = '☀️';
+        }
+    }
 
-    // Carregar dados
+    function carregarTema() {
+        const tema = localStorage.getItem('tema');
+        const btn = document.getElementById('btnTema');
+        
+        if (tema === 'escuro') {
+            document.body.classList.add('tema-escuro');
+            if (btn) btn.innerHTML = '☀️';
+        } else {
+            document.body.classList.remove('tema-escuro');
+            if (btn) btn.innerHTML = '🌙';
+        }
+    }
+
+    // ---------- Busca CNPJ Automática via API (ReceitaWS - gratuita) ----------
+    async function buscarCNPJAutomatico() {
+        let cnpj = document.getElementById('cnpjBusca').value.trim();
+        if (cnpj === '') { alert('Digite um CNPJ'); return; }
+        
+        cnpj = cnpj.replace(/\D/g, '');
+        if (cnpj.length !== 14) { alert('CNPJ inválido (14 dígitos)'); return; }
+        
+        const btnBusca = event ? event.target : document.querySelector('.pesquisa-cnpj button');
+        const textoOriginal = btnBusca.innerHTML;
+        btnBusca.innerHTML = '⏳ Buscando...';
+        btnBusca.disabled = true;
+        
+        try {
+            // Usando API pública da ReceitaWS (gratuita, sem necessidade de chave)
+            const response = await fetch(`https://receitaws.com.br/v1/cnpj/${cnpj}`);
+            
+            if (!response.ok) {
+                throw new Error('Erro na consulta');
+            }
+            
+            const data = await response.json();
+            
+            if (data.status === 'ERROR') {
+                alert(`CNPJ não encontrado ou inválido.\n${data.message || ''}`);
+                return;
+            }
+            
+            // Preenche os campos do modal se estiver aberto, ou abre um novo
+            const modal = document.getElementById('modalCliente');
+            const modalDisplay = window.getComputedStyle(modal).display;
+            
+            if (modalDisplay === 'flex') {
+                // Se o modal já está aberto, preenche os campos
+                if (data.nome) document.getElementById('nomeCliente').value = data.nome;
+                if (data.telefone) document.getElementById('telefoneCliente').value = data.telefone;
+                alert('✅ Dados do CNPJ preenchidos no formulário!');
+            } else {
+                // Abre o modal e preenche
+                abrirModalClienteNovo();
+                setTimeout(() => {
+                    if (data.nome) document.getElementById('nomeCliente').value = data.nome;
+                    if (data.telefone) document.getElementById('telefoneCliente').value = data.telefone;
+                    alert('✅ CNPJ encontrado! Dados preenchidos no formulário.');
+                }, 100);
+            }
+            
+            // Preenche o documento se estiver vazio
+            const docInput = document.getElementById('documentoCliente');
+            if (docInput && !docInput.value) {
+                docInput.value = cnpj;
+            }
+            
+        } catch (error) {
+            console.error('Erro ao buscar CNPJ:', error);
+            alert('❌ Erro ao consultar CNPJ. Verifique sua conexão ou tente novamente.\n\nDica: A API pode estar temporariamente indisponível. Você pode preencher manualmente.');
+        } finally {
+            btnBusca.innerHTML = textoOriginal;
+            btnBusca.disabled = false;
+        }
+    }
+
+    // ---------- Estrutura de dados ----------
+    let modalEditandoIndex = null;
+    let servicosTemp = [];
+
     function carregarDados() {
         const raw = localStorage.getItem('clientesDN_PRO_v2');
         if (!raw) return [];
@@ -464,7 +674,6 @@
         localStorage.setItem('clientesDN_PRO_v2', JSON.stringify(clientes));
     }
 
-    // helpers
     function escapeHTML(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
@@ -483,7 +692,8 @@
         document.getElementById('abaLista').classList.remove('ativo');
         document.getElementById('abaEditar').classList.remove('ativo');
         document.getElementById('abaServicosGlobal').classList.remove('ativo');
-        const abaCod=document.getElementById('abaCodigos'); if(abaCod) abaCod.classList.remove('ativo');
+        const abaCod = document.getElementById('abaCodigos'); if(abaCod) abaCod.classList.remove('ativo');
+        
         if (aba === 'lista') {
             document.querySelector('.aba-btn:first-child').classList.add('ativo');
             document.getElementById('abaLista').classList.add('ativo');
@@ -503,7 +713,6 @@
         }
     }
 
-    // Modal limpo ou edição
     function abrirModalClienteNovo() {
         modalEditandoIndex = null;
         document.getElementById('modalTitulo').innerText = '➕ Novo Cliente + Código';
@@ -588,7 +797,7 @@
             valor: valor,
             data: data,
             codigo: codigo,
-            servicos: [...servicosTemp]   // salva lista de serviços
+            servicos: [...servicosTemp]
         };
 
         if (modalEditandoIndex !== null && clientes[modalEditandoIndex]) {
@@ -603,6 +812,7 @@
         renderizarListaClientes();
         renderizarListaEdicao();
         renderizarServicosGlobais();
+        renderizarCodigos();
     }
 
     function fecharModal() {
@@ -611,7 +821,6 @@
         servicosTemp = [];
     }
 
-    // Render principal: cards com código clicável + serviços copiáveis
     function renderizarListaClientes() {
         const clientes = carregarDados();
         const container = document.getElementById('listaClientes');
@@ -628,7 +837,7 @@
             let servicosHtml = '';
             if (servicosLista.length) {
                 servicosHtml = `<div class="servicos-container"><strong>📌 Serviços (clique para copiar):</strong>`;
-                servicosLista.forEach((serv, sIdx) => {
+                servicosLista.forEach((serv) => {
                     servicosHtml += `<div class="servico-item" onclick="copiarTexto('${escapeHTML(serv.descricao)}')">
                                         <span class="servico-texto">🔹 ${escapeHTML(serv.descricao)}</span>
                                         <span style="font-size:12px;">📋 copiar</span>
@@ -660,7 +869,6 @@
         });
     }
 
-    // Aba de edição inline (mesmo esquema tradicional adaptado com código e serviços)
     function renderizarListaEdicao() {
         const clientes = carregarDados();
         const container = document.getElementById('listaEdicao');
@@ -715,6 +923,7 @@
             renderizarListaClientes();
             renderizarListaEdicao();
             renderizarServicosGlobais();
+            renderizarCodigos();
         }
     }
 
@@ -726,6 +935,7 @@
             renderizarListaClientes();
             renderizarListaEdicao();
             renderizarServicosGlobais();
+            renderizarCodigos();
         }
     }
 
@@ -742,7 +952,6 @@
         navigator.clipboard.writeText(texto).then(() => alert(`Copiado: ${texto}`)).catch(() => alert('Erro ao copiar'));
     }
 
-    // Central de serviços global
     function renderizarServicosGlobais() {
         const clientes = carregarDados();
         const container = document.getElementById('globalServicosList');
@@ -786,14 +995,6 @@
         });
     }
 
-    function buscarCNPJ() {
-        let cnpj = document.getElementById('cnpjBusca').value.trim();
-        if (cnpj === '') { alert('Digite um CNPJ'); return; }
-        cnpj = cnpj.replace(/\D/g, '');
-        if (cnpj.length !== 14) { alert('CNPJ inválido (14 dígitos)'); return; }
-        window.open(`https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${cnpj}`, '_blank');
-    }
-
     window.onclick = function(e) { if (e.target === document.getElementById('modalCliente')) fecharModal(); };
 
     function renderizarCodigos() {
@@ -828,8 +1029,6 @@
         });
     }
 
-    // ---------- NOVAS FUNÇÕES DE EXPORTAR/IMPORTAR CSV ----------
-
     function exportarCSV() {
         const clientes = carregarDados();
         if (clientes.length === 0) {
@@ -840,7 +1039,6 @@
         let csvContent = "Nome;Documento;Telefone;Codigo;Valor;Data;Servicos\n";
         
         clientes.forEach(c => {
-            // Unimos os serviços usando a barra vertical "|" para não quebrar as colunas do CSV
             const servicosStr = (c.servicos || []).map(s => s.descricao.replace(/;/g, ',')).join('|');
             
             const row = [
@@ -851,12 +1049,11 @@
                 c.valor || '0',
                 c.data || '',
                 servicosStr
-            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';'); // Tratamento para formatar corretamente e evitar quebra
+            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';');
             
             csvContent += row + "\n";
         });
 
-        // O Uint8Array com o BOM garante que o Excel do Brasil leia os acentos corretamente
         const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -888,10 +1085,8 @@
 
             const novosClientes = [];
             
-            // Pula a primeira linha (cabeçalho)
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                // Expressão regular para separar por ; ignorando os que estão dentro de aspas duplas
                 const cols = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').replace(/""/g, '"'));
 
                 if (cols.length >= 6) {
@@ -921,17 +1116,21 @@
                 renderizarListaClientes();
                 renderizarListaEdicao();
                 renderizarServicosGlobais();
-                const abaCod = document.getElementById('abaCodigos'); 
-                if(abaCod && abaCod.classList.contains('ativo')) renderizarCodigos();
+                renderizarCodigos();
             } else {
                 alert('❌ Nenhum dado válido encontrado para importar.');
             }
         };
         reader.readAsText(file);
-        event.target.value = ''; // Reseta o input para permitir importar o mesmo arquivo novamente se necessário
+        event.target.value = '';
     }
 
-    function init() { renderizarListaClientes(); renderizarServicosGlobais(); }
+    function init() { 
+        carregarTema();
+        renderizarListaClientes(); 
+        renderizarServicosGlobais();
+        renderizarCodigos();
+    }
     init();
 </script>
 </body>
