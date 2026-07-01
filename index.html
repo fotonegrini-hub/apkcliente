@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>APK Cliente PRO - DN | Código + Serviços</title>
+    <title>APK Cliente PRO - DN | Sistema Avançado v3.0</title>
     <style>
         * {
             margin: 0;
@@ -105,10 +105,55 @@
             color: #93c5fd;
         }
 
+        body.tema-escuro .toast {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-color: #475569;
+        }
+
+        body.tema-escuro .painel-lateral {
+            background: #1e293b;
+            border-left-color: #334155;
+        }
+
+        body.tema-escuro .item-lista-rapida {
+            border-bottom-color: #334155;
+        }
+
+        body.tema-escuro .item-lista-rapida:hover {
+            background: #334155;
+        }
+
+        body.tema-escuro .item-lista-rapida.destacado {
+            background: #1e3a5f;
+            border-left-color: #60a5fa;
+        }
+
+        body.tema-escuro .filtros-avancados select,
+        body.tema-escuro .filtros-avancados input {
+            background: #1e293b;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        body.tema-escuro .paginacao button {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        body.tema-escuro .paginacao button:hover {
+            background: #475569;
+        }
+
+        body.tema-escuro .paginacao button.ativo {
+            background: #2563eb;
+            color: white;
+        }
+
         header {
             background: #0f172a;
             color: white;
-            padding: 16px 20px;
+            padding: 12px 20px;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -124,11 +169,17 @@
         }
 
         .logo {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .logo span {
+            font-size: 12px;
+            font-weight: normal;
+            opacity: 0.7;
         }
 
         .pesquisa-cnpj {
@@ -140,7 +191,7 @@
 
         .pesquisa-cnpj input {
             flex: 1;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border-radius: 40px;
             border: none;
             outline: none;
@@ -148,7 +199,7 @@
         }
 
         .pesquisa-cnpj button {
-            padding: 12px 20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 40px;
             background: #10b981;
@@ -160,6 +211,11 @@
 
         .pesquisa-cnpj button:hover {
             background: #059669;
+        }
+
+        .pesquisa-cnpj button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .btn-tema {
@@ -177,25 +233,261 @@
             transform: scale(1.05);
         }
 
-        .container {
+        .container-principal {
+            display: flex;
+            gap: 20px;
             padding: 20px;
-            max-width: 1300px;
+            max-width: 1600px;
             margin: auto;
+            min-height: calc(100vh - 80px);
+        }
+
+        .conteudo-principal {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .painel-lateral {
+            width: 300px;
+            min-width: 250px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #eef2ff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            max-height: calc(100vh - 120px);
+            position: sticky;
+            top: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .painel-lateral h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0f172a;
+        }
+
+        body.tema-escuro .painel-lateral h3 {
+            color: #f1f5f9;
+        }
+
+        .busca-rapida-lateral {
+            padding: 10px 14px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: 14px;
+            background: #f8fafc;
+        }
+
+        body.tema-escuro .busca-rapida-lateral {
+            background: #0f172a;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        .lista-rapida {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lista-rapida::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .lista-rapida::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .lista-rapida::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        body.tema-escuro .lista-rapida::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        .item-lista-rapida {
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.15s;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        .item-lista-rapida:hover {
+            background: #f1f5f9;
+        }
+
+        .item-lista-rapida.destacado {
+            background: #dbeafe;
+            border-left: 3px solid #2563eb;
+        }
+
+        .item-lista-rapida .nome-mini {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        /* REMOVIDO O .valor-mini */
+
+        .item-lista-rapida .aba-tag {
+            font-size: 10px;
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        body.tema-escuro .item-lista-rapida .aba-tag {
+            background: #334155;
+            color: #94a3b8;
+        }
+
+        .contador-clientes {
+            font-size: 12px;
+            color: #94a3b8;
+            padding: 8px 0;
+            border-top: 1px solid #eef2ff;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        body.tema-escuro .contador-clientes {
+            border-top-color: #334155;
+        }
+
+        /* Filtros Avançados */
+        .filtros-avancados {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.tema-escuro .filtros-avancados {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        .filtros-avancados select,
+        .filtros-avancados input {
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            font-size: 13px;
+            background: white;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .filtros-avancados select:focus,
+        .filtros-avancados input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .filtros-avancados .btn-limpar {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .filtros-avancados .btn-limpar:hover {
+            background: #dc2626;
+        }
+
+        /* Paginação */
+        .paginacao {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .paginacao button {
+            padding: 8px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 30px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        body.tema-escuro .paginacao button {
+            background: #1e293b;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        .paginacao button:hover {
+            background: #e2e8f0;
+        }
+
+        body.tema-escuro .paginacao button:hover {
+            background: #334155;
+        }
+
+        .paginacao button.ativo {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        body.tema-escuro .paginacao button.ativo {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .paginacao button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .abas {
             display: flex;
-            gap: 6px;
-            margin-bottom: 24px;
+            gap: 4px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #e2e8f0;
             flex-wrap: wrap;
         }
 
         .aba-btn {
-            padding: 12px 28px;
+            padding: 10px 22px;
             background: none;
             border: none;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             color: #64748b;
@@ -226,7 +518,7 @@
         .acoes {
             display: flex;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -235,75 +527,121 @@
             background: #2563eb;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 22px;
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 14px;
         }
 
         .btn-add:hover {
             background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-add.btn-success {
+            background: #10b981;
+        }
+
+        .btn-add.btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-add.btn-warning {
+            background: #f59e0b;
+        }
+
+        .btn-add.btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-add.btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-add.btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-add.btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-add.btn-secondary:hover {
+            background: #4b5563;
         }
 
         .busca-input {
-            padding: 12px 18px;
+            padding: 10px 18px;
             border-radius: 40px;
             border: 1px solid #cbd5e1;
             width: 260px;
             outline: none;
             transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .busca-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .clientes {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
 
         .card {
             background: white;
-            border-radius: 24px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 18px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.05);
             transition: 0.2s;
             border: 1px solid #eef2ff;
             position: relative;
         }
 
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+        }
+
         .card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
             padding-right: 50px;
             color: #0f172a;
         }
 
         .card p {
-            margin: 8px 0;
+            margin: 6px 0;
             font-size: 0.85rem;
         }
 
         .card-actions {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 14px;
+            right: 14px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .icon-btn {
             background: #f1f5f9;
             border: none;
             cursor: pointer;
-            font-size: 16px;
-            padding: 6px 10px;
-            border-radius: 40px;
+            font-size: 14px;
+            padding: 5px 9px;
+            border-radius: 30px;
             transition: 0.2s;
         }
 
         .icon-btn:hover {
             background: #e2e8f0;
+            transform: scale(1.05);
         }
 
         .edit-btn { color: #2563eb; }
@@ -321,8 +659,8 @@
 
         .copiavel {
             background: #f8fafc;
-            padding: 8px 12px;
-            border-radius: 20px;
+            padding: 6px 10px;
+            border-radius: 16px;
             font-family: monospace;
             font-weight: 600;
             cursor: pointer;
@@ -331,45 +669,68 @@
             display: inline-block;
             width: 100%;
             text-align: center;
-            margin: 6px 0;
+            margin: 4px 0;
+            font-size: 13px;
+        }
+
+        .copiavel:hover {
+            background: #e2e8f0;
+            border-color: #64748b;
         }
 
         .codigo-badge {
             background: #e0f2fe;
             color: #0369a1;
             font-weight: bold;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 30px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .servicos-container {
-            margin-top: 12px;
+            margin-top: 10px;
             border-top: 1px solid #e2e8f0;
-            padding-top: 12px;
+            padding-top: 10px;
         }
 
         .servico-item {
             background: #fef9e3;
-            padding: 8px 12px;
-            border-radius: 16px;
-            margin: 6px 0;
+            padding: 6px 10px;
+            border-radius: 14px;
+            margin: 4px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
             transition: 0.1s;
+            font-size: 13px;
         }
 
         .servico-item:hover {
             background: #fef3c7;
+            transform: scale(1.01);
         }
 
         .servico-texto {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 6px 0;
+        }
+
+        .tag {
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
         }
 
         .modal {
@@ -390,35 +751,48 @@
             background: white;
             max-width: 520px;
             width: 100%;
-            border-radius: 32px;
+            border-radius: 28px;
             padding: 28px;
             max-height: 90vh;
             overflow-y: auto;
         }
 
         .modal-content h2 {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
+            font-size: 20px;
         }
 
         .modal-content input, .modal-content select, .modal-content textarea {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 14px;
-            border-radius: 20px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border-radius: 16px;
             border: 1px solid #cbd5e1;
+            font-size: 14px;
+        }
+
+        .modal-content input:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .salvar {
             width: 100%;
             background: #10b981;
             color: white;
-            padding: 14px;
+            padding: 12px;
             border: none;
             border-radius: 40px;
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
             margin-top: 8px;
+            transition: 0.2s;
+        }
+
+        .salvar:hover {
+            background: #059669;
         }
 
         .btn-cancelar {
@@ -426,11 +800,15 @@
             margin-top: 8px;
         }
 
+        .btn-cancelar:hover {
+            background: #4b5563;
+        }
+
         .grupo-servicos {
             background: #f9fafb;
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 12px;
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .btn-add-servico {
@@ -442,23 +820,29 @@
             font-size: 13px;
             cursor: pointer;
             margin-top: 6px;
+            transition: 0.2s;
+        }
+
+        .btn-add-servico:hover {
+            background: #7c3aed;
         }
 
         .lista-servicos-modal {
-            max-height: 180px;
+            max-height: 160px;
             overflow-y: auto;
             margin-bottom: 10px;
         }
 
         .servico-mini {
             background: white;
-            padding: 8px 12px;
-            border-radius: 30px;
-            margin-bottom: 6px;
+            padding: 6px 10px;
+            border-radius: 24px;
+            margin-bottom: 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #e2e8f0;
+            font-size: 13px;
         }
 
         .remover-servico {
@@ -467,7 +851,7 @@
             color: #ef4444;
             font-weight: bold;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .loading-cnpj {
@@ -481,9 +865,229 @@
             color: #34d399;
         }
 
-        @media(max-width: 700px){
-            .topo { flex-direction: column; }
-            .aba-btn { flex: 1; text-align: center; }
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+
+        .toast {
+            background: white;
+            padding: 14px 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-left: 4px solid #10b981;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .toast.erro {
+            border-left-color: #ef4444;
+        }
+
+        .toast.aviso {
+            border-left-color: #f59e0b;
+        }
+
+        .toast.info {
+            border-left-color: #2563eb;
+        }
+
+        .toast .close-toast {
+            cursor: pointer;
+            opacity: 0.6;
+            font-size: 18px;
+            margin-left: auto;
+        }
+
+        .toast .close-toast:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Responsivo */
+        @media(max-width: 1024px) {
+            .painel-lateral {
+                width: 240px;
+                min-width: 200px;
+            }
+        }
+
+        @media(max-width: 768px) {
+            .container-principal {
+                flex-direction: column;
+                padding: 12px;
+            }
+            
+            .painel-lateral {
+                width: 100%;
+                min-width: unset;
+                position: static;
+                max-height: 300px;
+                order: -1;
+                padding: 16px;
+            }
+
+            .topo {
+                flex-direction: column;
+            }
+
+            .aba-btn {
+                flex: 1;
+                text-align: center;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .busca-input {
+                width: 100%;
+            }
+
+            .clientes {
+                grid-template-columns: 1fr;
+            }
+
+            .acoes {
+                flex-direction: column;
+            }
+
+            .acoes .btn-add {
+                width: 100%;
+                text-align: center;
+            }
+
+            .pesquisa-cnpj {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .filtros-avancados {
+                flex-direction: column;
+            }
+
+            .filtros-avancados select,
+            .filtros-avancados input {
+                min-width: unset;
+            }
+        }
+
+        @media(max-width: 480px) {
+            .modal-content {
+                padding: 16px;
+                margin: 10px;
+                border-radius: 20px;
+            }
+
+            .card {
+                padding: 14px;
+            }
+
+            .painel-lateral {
+                max-height: 250px;
+            }
+        }
+
+        /* Destaque para cliente selecionado na lista */
+        .item-lista-rapida.destacado {
+            background: #dbeafe;
+            border-left: 3px solid #2563eb;
+        }
+
+        .card-destacado {
+            box-shadow: 0 0 0 3px #2563eb, 0 8px 20px rgba(0,0,0,0.1) !important;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+
+        body.tema-escuro .card-destacado {
+            box-shadow: 0 0 0 3px #60a5fa, 0 8px 20px rgba(0,0,0,0.3) !important;
+        }
+
+        /* Badge de origem na lista rápida */
+        .badge-origem {
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        body.tema-escuro .badge-origem {
+            background: #1e3a5f;
+            color: #93c5fd;
+        }
+
+        .badge-origem.fazenda {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        body.tema-escuro .badge-origem.fazenda {
+            background: #064e3b;
+            color: #6ee7b7;
+        }
+
+        /* Estilo para o filtro de busca exclusiva */
+        .filtro-exclusivo-ativo {
+            background: #dbeafe !important;
+            border-color: #2563eb !important;
+        }
+
+        body.tema-escuro .filtro-exclusivo-ativo {
+            background: #1e3a5f !important;
+            border-color: #60a5fa !important;
+        }
+
+        .btn-limpar-filtro-exclusivo {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+            display: none;
+        }
+
+        .btn-limpar-filtro-exclusivo:hover {
+            background: #7c3aed;
+        }
+
+        .filtro-exclusivo-info {
+            font-size: 13px;
+            color: #2563eb;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            background: #eff6ff;
+            border-radius: 30px;
+        }
+
+        body.tema-escuro .filtro-exclusivo-info {
+            background: #1e3a5f;
+            color: #93c5fd;
         }
     </style>
 </head>
@@ -491,9 +1095,10 @@
 
 <header>
     <div class="topo">
-        <div class="logo">⚡ APK Cliente PRO - DN | Código & Serviços</div>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div class="logo">⚡ APK Cliente PRO <span>v3.0</span></div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
             <button class="btn-tema" onclick="alternarTema()" id="btnTema">🌙</button>
+            <button class="btn-add btn-secondary" onclick="restaurarBackup()" style="padding: 8px 16px; font-size: 13px;">💾 Backup</button>
             <div class="pesquisa-cnpj">
                 <input type="text" id="cnpjBusca" placeholder="Pesquisar CNPJ (API automática)" />
                 <button onclick="buscarCNPJAutomatico()">🔍 Buscar</button>
@@ -502,45 +1107,148 @@
     </div>
 </header>
 
-<div class="container">
-    <div class="abas">
-        <button class="aba-btn ativo" onclick="trocarAba('lista')">📋 Clientes + Serviços</button>
-        <button class="aba-btn" onclick="trocarAba('editar')">✏️ Edição Avançada</button>
-        <button class="aba-btn" onclick="trocarAba('servicosGlobal')">📦 Central de Serviços</button>
-        <button class="aba-btn" onclick="trocarAba('codigos')">🏷️ Códigos</button>
-    </div>
-
-    <div id="abaLista" class="aba-conteudo ativo">
-        <div class="acoes">
-            <button class="btn-add" onclick="abrirModalClienteNovo()">+ Adicionar Cliente</button>
-            <button class="btn-add" style="background: #10b981;" onclick="exportarCSV()">📥 Exportar CSV</button>
-            <button class="btn-add" style="background: #f59e0b;" onclick="acionarImportacao()">📤 Importar CSV</button>
-            <input type="file" id="inputImportarCSV" accept=".csv" style="display: none;" onchange="importarCSV(event)" />
-            <input type="text" id="buscaRapida" placeholder="🔎 Buscar por nome, documento, código..." class="busca-input" onkeyup="filtrarClientes()" />
+<div class="container-principal">
+    <div class="conteudo-principal">
+        <div class="abas">
+            <button class="aba-btn ativo" onclick="trocarAba('lista')">📋 Clientes</button>
+            <button class="aba-btn" onclick="trocarAba('editar')">✏️ Edição</button>
+            <button class="aba-btn" onclick="trocarAba('servicosGlobal')">📦 Serviços</button>
+            <button class="aba-btn" onclick="trocarAba('codigos')">🏷️ Códigos</button>
+            <button class="aba-btn" onclick="trocarAba('fazenda')">🌾 Fazenda</button>
+            <button class="aba-btn" onclick="trocarAba('relatorios')">📊 Relatórios</button>
         </div>
-        <div class="clientes" id="listaClientes"></div>
-    </div>
 
-    <div id="abaEditar" class="aba-conteudo">
-        <div class="clientes" id="listaEdicao"></div>
-    </div>
-
-    <div id="abaServicosGlobal" class="aba-conteudo">
-        <div class="acoes">
-            <input type="text" id="buscaServicoGlobal" placeholder="🔍 Buscar serviço por nome, cliente ou código..." class="busca-input" onkeyup="filtrarServicosGlobais()" />
+        <div id="abaLista" class="aba-conteudo ativo">
+            <div class="acoes">
+                <button class="btn-add" onclick="abrirModalClienteNovo('clientes')">+ Adicionar Cliente</button>
+                <button class="btn-add btn-success" onclick="exportarCSV('clientes')">📥 Exportar CSV</button>
+                <button class="btn-add btn-warning" onclick="exportarJSON('clientes')">📦 Exportar JSON</button>
+                <button class="btn-add btn-warning" onclick="exportarExcel('clientes')">📊 Excel</button>
+                <button class="btn-add btn-warning" onclick="acionarImportacao('clientes')">📤 Importar</button>
+                <input type="file" id="inputImportarCSV_clientes" accept=".csv,.json" style="display: none;" onchange="importarDados(event, 'clientes')" />
+                <input type="text" id="buscaRapida_clientes" placeholder="🔎 Buscar nome, doc, código..." class="busca-input" onkeyup="filtrarClientes('clientes')" />
+                <span class="filtro-exclusivo-info" id="filtroExclusivoInfo_clientes">
+                    🔍 <span id="filtroExclusivoNome_clientes"></span>
+                    <button class="btn-limpar-filtro-exclusivo" onclick="limparFiltroExclusivo('clientes')">✕</button>
+                </span>
+            </div>
+            
+            <!-- Filtros Avançados -->
+            <div class="filtros-avancados">
+                <select id="filtroValor_clientes" onchange="aplicarFiltros('clientes')">
+                    <option value="">💰 Todos os valores</option>
+                    <option value="menor50">Menor que R$50</option>
+                    <option value="50a200">R$50 - R$200</option>
+                    <option value="maior200">Maior que R$200</option>
+                </select>
+                <select id="filtroServico_clientes" onchange="aplicarFiltros('clientes')">
+                    <option value="">📌 Todos os serviços</option>
+                </select>
+                <input type="date" id="filtroDataInicio_clientes" placeholder="Data inicial" onchange="aplicarFiltros('clientes')" />
+                <input type="date" id="filtroDataFim_clientes" placeholder="Data final" onchange="aplicarFiltros('clientes')" />
+                <button class="btn-limpar" onclick="limparFiltros('clientes')">✕ Limpar</button>
+            </div>
+            
+            <div class="clientes" id="listaClientes_clientes"></div>
+            <div class="paginacao" id="paginacao_clientes"></div>
         </div>
-        <div id="globalServicosList" style="display: flex; flex-direction: column; gap: 12px;"></div>
-    </div>
-    
-    <div id="abaCodigos" class="aba-conteudo">
-        <div class="acoes">
-            <input type="text" id="buscaCodigo" placeholder="🔍 Buscar código..." class="busca-input" onkeyup="filtrarCodigos()" />
+
+        <div id="abaEditar" class="aba-conteudo">
+            <div class="clientes" id="listaEdicao_clientes"></div>
         </div>
-        <div class="clientes" id="listaCodigos"></div>
+
+        <div id="abaServicosGlobal" class="aba-conteudo">
+            <div class="acoes">
+                <input type="text" id="buscaServicoGlobal" placeholder="🔍 Buscar serviço por nome, cliente ou código..." class="busca-input" onkeyup="filtrarServicosGlobais()" />
+            </div>
+            <div id="globalServicosList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+        
+        <div id="abaCodigos" class="aba-conteudo">
+            <div class="acoes">
+                <input type="text" id="buscaCodigo" placeholder="🔍 Buscar código..." class="busca-input" onkeyup="filtrarCodigos()" />
+            </div>
+            <div class="clientes" id="listaCodigos"></div>
+        </div>
+
+        <div id="abaFazenda" class="aba-conteudo">
+            <div class="acoes">
+                <button class="btn-add" onclick="abrirModalClienteNovo('fazenda')">+ Adicionar à Fazenda</button>
+                <button class="btn-add btn-success" onclick="exportarCSV('fazenda')">📥 Exportar CSV</button>
+                <button class="btn-add btn-warning" onclick="exportarJSON('fazenda')">📦 Exportar JSON</button>
+                <button class="btn-add btn-warning" onclick="exportarExcel('fazenda')">📊 Excel</button>
+                <button class="btn-add btn-warning" onclick="acionarImportacao('fazenda')">📤 Importar</button>
+                <input type="file" id="inputImportarCSV_fazenda" accept=".csv,.json" style="display: none;" onchange="importarDados(event, 'fazenda')" />
+                <input type="text" id="buscaRapida_fazenda" placeholder="🔎 Buscar nome, doc, código..." class="busca-input" onkeyup="filtrarClientes('fazenda')" />
+                <span class="filtro-exclusivo-info" id="filtroExclusivoInfo_fazenda">
+                    🔍 <span id="filtroExclusivoNome_fazenda"></span>
+                    <button class="btn-limpar-filtro-exclusivo" onclick="limparFiltroExclusivo('fazenda')">✕</button>
+                </span>
+            </div>
+            
+            <!-- Filtros Avançados para Fazenda -->
+            <div class="filtros-avancados">
+                <select id="filtroValor_fazenda" onchange="aplicarFiltros('fazenda')">
+                    <option value="">💰 Todos os valores</option>
+                    <option value="menor50">Menor que R$50</option>
+                    <option value="50a200">R$50 - R$200</option>
+                    <option value="maior200">Maior que R$200</option>
+                </select>
+                <select id="filtroServico_fazenda" onchange="aplicarFiltros('fazenda')">
+                    <option value="">📌 Todos os serviços</option>
+                </select>
+                <input type="date" id="filtroDataInicio_fazenda" placeholder="Data inicial" onchange="aplicarFiltros('fazenda')" />
+                <input type="date" id="filtroDataFim_fazenda" placeholder="Data final" onchange="aplicarFiltros('fazenda')" />
+                <button class="btn-limpar" onclick="limparFiltros('fazenda')">✕ Limpar</button>
+            </div>
+            
+            <div class="clientes" id="listaClientes_fazenda"></div>
+            <div class="paginacao" id="paginacao_fazenda"></div>
+        </div>
+
+        <!-- Nova Aba Relatórios -->
+        <div id="abaRelatorios" class="aba-conteudo">
+            <div class="acoes">
+                <button class="btn-add" onclick="gerarRelatorios()">📊 Gerar Relatórios</button>
+                <button class="btn-add btn-success" onclick="gerarEtiquetas()">🏷️ Etiquetas</button>
+            </div>
+            <div id="relatoriosContainer">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 16px;">
+                    <div class="card" style="text-align: center;">
+                        <h3>👥 Total Clientes</h3>
+                        <p style="font-size: 28px; font-weight: bold;" id="relTotalClientes">0</p>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <h3>💰 Total Devido</h3>
+                        <p style="font-size: 28px; font-weight: bold; color: #dc2626;" id="relTotalDevido">R$ 0,00</p>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <h3>📊 Média por Cliente</h3>
+                        <p style="font-size: 28px; font-weight: bold;" id="relMediaCliente">R$ 0,00</p>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <h3>📦 Clientes com Serviços</h3>
+                        <p style="font-size: 28px; font-weight: bold;" id="relComServicos">0</p>
+                    </div>
+                </div>
+                <div id="graficoContainer" style="margin-top: 20px; background: #f8fafc; border-radius: 20px; padding: 20px; min-height: 300px;">
+                    <canvas id="graficoClientes"></canvas>
+                </div>
+                <div style="margin-top: 20px;" id="relatorioDetalhado"></div>
+            </div>
+        </div>
     </div>
 
+    <!-- Painel Lateral - Lista Rápida -->
+    <div class="painel-lateral" id="painelLateral">
+        <h3>⚡ Lista Rápida</h3>
+        <input type="text" id="buscaLateral" placeholder="🔍 Filtrar clientes..." class="busca-rapida-lateral" oninput="filtrarListaLateral()" />
+        <div class="lista-rapida" id="listaRapida"></div>
+        <div class="contador-clientes" id="contadorClientes">0 cadastros | Total: R$ 0,00</div>
+    </div>
 </div>
 
+<!-- Modal -->
 <div id="modalCliente" class="modal">
     <div class="modal-content">
         <h2 id="modalTitulo">➕ Cliente + Código / Serviços</h2>
@@ -550,15 +1258,16 @@
         <input type="text" id="codigoCliente" placeholder="Código único (ex: DN-001, CLT-10) *" />
         <input type="number" step="0.01" id="valorCliente" placeholder="Valor Devido R$" />
         <input type="date" id="dataCliente" />
+        <input type="text" id="tagsCliente" placeholder="Tags (ex: VIP, Urgente, Novo)" />
         
         <div class="grupo-servicos">
-            <label><strong>📋 Serviços vinculados a este código:</strong></label>
+            <label><strong>📋 Serviços vinculados:</strong></label>
             <div id="listaServicosModal" class="lista-servicos-modal"></div>
             <div style="display: flex; gap: 8px; margin-top: 8px;">
                 <input type="text" id="novoServicoDesc" placeholder="Descrição do serviço" style="flex:1" />
                 <button class="btn-add-servico" onclick="adicionarServicoNaModal()">+ Adicionar</button>
             </div>
-            <small style="color:#64748b;">Clique em qualquer serviço abaixo para copiar</small>
+            <small style="color:#64748b;">Clique em qualquer serviço para copiar</small>
         </div>
         
         <button class="salvar" onclick="salvarClienteCompleto()">✅ Salvar Cliente</button>
@@ -566,8 +1275,54 @@
     </div>
 </div>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // ---------- Tema Claro/Escuro ----------
+    // ---------- Variáveis Globais ----------
+    let abaAtual = 'lista';
+    let clienteSelecionadoId = null;
+    let modalEditandoIndex = null;
+    let servicosTemp = [];
+    let abaAtualModal = 'clientes';
+    let paginaAtual = { clientes: 1, fazenda: 1 };
+    const ITENS_POR_PAGINA = 8;
+    
+    // Variáveis para filtro exclusivo
+    let filtroExclusivo = { clientes: null, fazenda: null };
+
+    // ---------- Sistema de Toast ----------
+    function showToast(mensagem, tipo = 'sucesso') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${tipo}`;
+        
+        const icones = {
+            sucesso: '✅',
+            erro: '❌',
+            aviso: '⚠️',
+            info: 'ℹ️'
+        };
+        
+        toast.innerHTML = `
+            <span>${icones[tipo] || 'ℹ️'}</span>
+            <span style="flex:1">${mensagem}</span>
+            <span class="close-toast" onclick="this.parentElement.remove()">✕</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100px)';
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 4000);
+    }
+
+    // ---------- Tema ----------
     function alternarTema() {
         const body = document.body;
         const btn = document.getElementById('btnTema');
@@ -596,21 +1351,111 @@
         }
     }
 
-    // ---------- Busca CNPJ Automática via API (ReceitaWS - gratuita) ----------
+    // ---------- Validação ----------
+    function validarDocumento(doc) {
+        doc = doc.replace(/\D/g, '');
+        if (doc.length === 11) {
+            if (/^(\d)\1+$/.test(doc)) return false;
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(doc.charAt(i)) * (10 - i);
+            }
+            let resto = 11 - (soma % 11);
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(doc.charAt(9))) return false;
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(doc.charAt(i)) * (11 - i);
+            }
+            resto = 11 - (soma % 11);
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(doc.charAt(10))) return false;
+            return true;
+        } else if (doc.length === 14) {
+            if (/^(\d)\1+$/.test(doc)) return false;
+            let tamanho = doc.length - 2;
+            let numeros = doc.substring(0, tamanho);
+            const digitos = doc.substring(tamanho);
+            let soma = 0;
+            let pos = tamanho - 7;
+            for (let i = tamanho; i >= 1; i--) {
+                soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(0))) return false;
+            tamanho = doc.length - 1;
+            numeros = doc.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (let i = tamanho; i >= 1; i--) {
+                soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(1))) return false;
+            return true;
+        }
+        return false;
+    }
+
+    function formatarDocumento(doc) {
+        doc = doc.replace(/\D/g, '');
+        if (doc.length === 11) {
+            return doc.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        } else if (doc.length === 14) {
+            return doc.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+        }
+        return doc;
+    }
+
+    // ---------- Backup ----------
+    function backupAutomatico() {
+        const dados = {
+            clientes: carregarDados('clientes'),
+            fazenda: carregarDados('fazenda'),
+            data: new Date().toISOString()
+        };
+        localStorage.setItem('backup_auto', JSON.stringify(dados));
+    }
+
+    function restaurarBackup() {
+        const backup = localStorage.getItem('backup_auto');
+        if (!backup) {
+            showToast('Nenhum backup automático encontrado', 'aviso');
+            return;
+        }
+        
+        try {
+            const dados = JSON.parse(backup);
+            if (confirm(`Restaurar backup de ${new Date(dados.data).toLocaleString()}?\n\nIsso substituirá todos os dados atuais.`)) {
+                salvarDados(dados.clientes || [], 'clientes');
+                salvarDados(dados.fazenda || [], 'fazenda');
+                recarregarTudo();
+                showToast('✅ Backup restaurado com sucesso!', 'sucesso');
+            }
+        } catch(e) {
+            showToast('❌ Erro ao restaurar backup', 'erro');
+        }
+    }
+
+    // Backup automático a cada 5 minutos
+    setInterval(backupAutomatico, 300000);
+
+    // ---------- Busca CNPJ ----------
     async function buscarCNPJAutomatico() {
         let cnpj = document.getElementById('cnpjBusca').value.trim();
-        if (cnpj === '') { alert('Digite um CNPJ'); return; }
+        if (cnpj === '') { showToast('Digite um CNPJ para buscar', 'aviso'); return; }
         
         cnpj = cnpj.replace(/\D/g, '');
-        if (cnpj.length !== 14) { alert('CNPJ inválido (14 dígitos)'); return; }
+        if (cnpj.length !== 14) { showToast('CNPJ inválido (14 dígitos)', 'erro'); return; }
         
-        const btnBusca = event ? event.target : document.querySelector('.pesquisa-cnpj button');
+        const btnBusca = document.querySelector('.pesquisa-cnpj button');
         const textoOriginal = btnBusca.innerHTML;
         btnBusca.innerHTML = '⏳ Buscando...';
         btnBusca.disabled = true;
         
         try {
-            // Usando API pública da ReceitaWS (gratuita, sem necessidade de chave)
             const response = await fetch(`https://receitaws.com.br/v1/cnpj/${cnpj}`);
             
             if (!response.ok) {
@@ -620,30 +1465,26 @@
             const data = await response.json();
             
             if (data.status === 'ERROR') {
-                alert(`CNPJ não encontrado ou inválido.\n${data.message || ''}`);
+                showToast(`CNPJ não encontrado: ${data.message || ''}`, 'erro');
                 return;
             }
             
-            // Preenche os campos do modal se estiver aberto, ou abre um novo
             const modal = document.getElementById('modalCliente');
             const modalDisplay = window.getComputedStyle(modal).display;
             
             if (modalDisplay === 'flex') {
-                // Se o modal já está aberto, preenche os campos
                 if (data.nome) document.getElementById('nomeCliente').value = data.nome;
                 if (data.telefone) document.getElementById('telefoneCliente').value = data.telefone;
-                alert('✅ Dados do CNPJ preenchidos no formulário!');
+                showToast('✅ Dados do CNPJ preenchidos!', 'sucesso');
             } else {
-                // Abre o modal e preenche
-                abrirModalClienteNovo();
+                abrirModalClienteNovo('clientes');
                 setTimeout(() => {
                     if (data.nome) document.getElementById('nomeCliente').value = data.nome;
                     if (data.telefone) document.getElementById('telefoneCliente').value = data.telefone;
-                    alert('✅ CNPJ encontrado! Dados preenchidos no formulário.');
+                    showToast('✅ CNPJ encontrado! Dados preenchidos.', 'sucesso');
                 }, 100);
             }
             
-            // Preenche o documento se estiver vazio
             const docInput = document.getElementById('documentoCliente');
             if (docInput && !docInput.value) {
                 docInput.value = cnpj;
@@ -651,27 +1492,61 @@
             
         } catch (error) {
             console.error('Erro ao buscar CNPJ:', error);
-            alert('❌ Erro ao consultar CNPJ. Verifique sua conexão ou tente novamente.\n\nDica: A API pode estar temporariamente indisponível. Você pode preencher manualmente.');
+            showToast('❌ Erro ao consultar CNPJ. Verifique sua conexão.', 'erro');
         } finally {
             btnBusca.innerHTML = textoOriginal;
             btnBusca.disabled = false;
         }
     }
 
-    // ---------- Estrutura de dados ----------
-    let modalEditandoIndex = null;
-    let servicosTemp = [];
+    // ---------- Atalhos ----------
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'n') {
+            e.preventDefault();
+            abrirModalClienteNovo('clientes');
+        }
+        if (e.ctrlKey && e.key === 's' && document.getElementById('modalCliente').style.display === 'flex') {
+            e.preventDefault();
+            salvarClienteCompleto();
+        }
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('modalCliente');
+            if (modal.style.display === 'flex') {
+                fecharModal();
+            } else {
+                voltarParaLista();
+            }
+        }
+    });
 
-    function carregarDados() {
-        const raw = localStorage.getItem('clientesDN_PRO_v2');
+    function voltarParaLista() {
+        if (abaAtual === 'lista') {
+            showToast('ℹ️ Você já está na lista de clientes', 'info');
+            return;
+        }
+        trocarAba('lista');
+        showToast('↩️ Voltando para a lista de clientes', 'info');
+        document.querySelectorAll('.item-lista-rapida.destacado').forEach(el => {
+            el.classList.remove('destacado');
+        });
+        clienteSelecionadoId = null;
+    }
+
+    // ---------- Dados ----------
+    function carregarDados(aba = 'clientes') {
+        const chave = `clientesDN_PRO_v3_${aba}`;
+        const raw = localStorage.getItem(chave);
         if (!raw) return [];
         try {
             return JSON.parse(raw);
         } catch(e) { return []; }
     }
 
-    function salvarDados(clientes) {
-        localStorage.setItem('clientesDN_PRO_v2', JSON.stringify(clientes));
+    function salvarDados(clientes, aba = 'clientes') {
+        const chave = `clientesDN_PRO_v3_${aba}`;
+        localStorage.setItem(chave, JSON.stringify(clientes));
+        atualizarListaLateral();
+        atualizarContador();
     }
 
     function escapeHTML(str) {
@@ -686,70 +1561,104 @@
         return dataISO;
     }
 
-    // Abas
+    function gerarCorTag(tag) {
+        const cores = ['#2563eb', '#7c3aed', '#dc2626', '#059669', '#d97706', '#0891b2', '#4f46e5'];
+        let hash = 0;
+        for (let i = 0; i < tag.length; i++) {
+            hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return cores[Math.abs(hash) % cores.length];
+    }
+
+    // ---------- Abas ----------
     function trocarAba(aba) {
+        abaAtual = aba;
+        
         document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
-        document.getElementById('abaLista').classList.remove('ativo');
-        document.getElementById('abaEditar').classList.remove('ativo');
-        document.getElementById('abaServicosGlobal').classList.remove('ativo');
-        const abaCod = document.getElementById('abaCodigos'); if(abaCod) abaCod.classList.remove('ativo');
+        document.querySelectorAll('.aba-conteudo').forEach(div => div.classList.remove('ativo'));
+        
+        const abaMap = {
+            'lista': { btn: 0, div: 'abaLista' },
+            'editar': { btn: 1, div: 'abaEditar' },
+            'servicosGlobal': { btn: 2, div: 'abaServicosGlobal' },
+            'codigos': { btn: 3, div: 'abaCodigos' },
+            'fazenda': { btn: 4, div: 'abaFazenda' },
+            'relatorios': { btn: 5, div: 'abaRelatorios' }
+        };
+        
+        const info = abaMap[aba];
+        if (info) {
+            const btns = document.querySelectorAll('.aba-btn');
+            if (btns[info.btn]) btns[info.btn].classList.add('ativo');
+            const div = document.getElementById(info.div);
+            if (div) div.classList.add('ativo');
+        }
         
         if (aba === 'lista') {
-            document.querySelector('.aba-btn:first-child').classList.add('ativo');
-            document.getElementById('abaLista').classList.add('ativo');
-            renderizarListaClientes();
+            renderizarListaClientes('clientes');
         } else if (aba === 'editar') {
-            document.querySelector('.aba-btn:nth-child(2)').classList.add('ativo');
-            document.getElementById('abaEditar').classList.add('ativo');
-            renderizarListaEdicao();
+            renderizarListaEdicao('clientes');
         } else if (aba === 'codigos') {
-            document.querySelector('.aba-btn:nth-child(4)').classList.add('ativo');
-            document.getElementById('abaCodigos').classList.add('ativo');
             renderizarCodigos();
+        } else if (aba === 'fazenda') {
+            renderizarListaClientes('fazenda');
+        } else if (aba === 'relatorios') {
+            gerarRelatorios();
         } else {
-            document.querySelector('.aba-btn:nth-child(3)').classList.add('ativo');
-            document.getElementById('abaServicosGlobal').classList.add('ativo');
             renderizarServicosGlobais();
         }
     }
 
-    function abrirModalClienteNovo() {
+    // ---------- Modal ----------
+    function abrirModalClienteNovo(aba = 'clientes') {
+        abaAtualModal = aba;
         modalEditandoIndex = null;
-        document.getElementById('modalTitulo').innerText = '➕ Novo Cliente + Código';
+        document.getElementById('modalTitulo').innerText = aba === 'fazenda' ? '➕ Novo Cadastro na Fazenda' : '➕ Novo Cliente + Código';
         document.getElementById('nomeCliente').value = '';
         document.getElementById('documentoCliente').value = '';
         document.getElementById('telefoneCliente').value = '';
         document.getElementById('valorCliente').value = '';
         document.getElementById('dataCliente').value = new Date().toISOString().slice(0,10);
         document.getElementById('codigoCliente').value = '';
+        document.getElementById('tagsCliente').value = '';
         servicosTemp = [];
         atualizarListaServicosModal();
         document.getElementById('modalCliente').style.display = 'flex';
     }
 
-    function abrirModalEditarCliente(index) {
-        const clientes = carregarDados();
+    function abrirModalEditarCliente(index, aba = 'clientes') {
+        const clientes = carregarDados(aba);
         const c = clientes[index];
         if (!c) return;
+        abaAtualModal = aba;
         modalEditandoIndex = index;
-        document.getElementById('modalTitulo').innerText = '✏️ Editar Cliente + Serviços';
+        document.getElementById('modalTitulo').innerText = aba === 'fazenda' ? '✏️ Editar Cadastro da Fazenda' : '✏️ Editar Cliente + Serviços';
         document.getElementById('nomeCliente').value = c.nome || '';
         document.getElementById('documentoCliente').value = c.documento || '';
         document.getElementById('telefoneCliente').value = c.telefone || '';
         document.getElementById('valorCliente').value = c.valor || '0';
         document.getElementById('dataCliente').value = c.data || new Date().toISOString().slice(0,10);
         document.getElementById('codigoCliente').value = c.codigo || '';
+        document.getElementById('tagsCliente').value = (c.tags || []).join(', ');
         servicosTemp = Array.isArray(c.servicos) ? [...c.servicos] : [];
         atualizarListaServicosModal();
         document.getElementById('modalCliente').style.display = 'flex';
     }
 
+    function fecharModal() {
+        document.getElementById('modalCliente').style.display = 'none';
+        modalEditandoIndex = null;
+        servicosTemp = [];
+    }
+
+    // ---------- Serviços no Modal ----------
     function adicionarServicoNaModal() {
         const desc = document.getElementById('novoServicoDesc').value.trim();
-        if (desc === '') { alert('Digite a descrição do serviço'); return; }
+        if (desc === '') { showToast('Digite a descrição do serviço', 'aviso'); return; }
         servicosTemp.push({ descricao: desc });
         document.getElementById('novoServicoDesc').value = '';
         atualizarListaServicosModal();
+        showToast('Serviço adicionado!', 'sucesso');
     }
 
     function removerServicoModal(indice) {
@@ -776,62 +1685,118 @@
         });
     }
 
+    // ---------- Salvar Cliente ----------
     function salvarClienteCompleto() {
         const nome = document.getElementById('nomeCliente').value.trim();
-        const documento = document.getElementById('documentoCliente').value.trim();
+        let documento = document.getElementById('documentoCliente').value.trim();
         const telefone = document.getElementById('telefoneCliente').value.trim();
         let valor = document.getElementById('valorCliente').value;
         let data = document.getElementById('dataCliente').value;
         let codigo = document.getElementById('codigoCliente').value.trim();
+        const tagsRaw = document.getElementById('tagsCliente').value.trim();
+        const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(t => t) : [];
 
-        if (nome === '' || documento === '') { alert('Nome e documento são obrigatórios'); return; }
-        if (codigo === '') { alert('O campo CÓDIGO é obrigatório (ex: DN-001, CLIENTE10)'); return; }
+        if (nome === '' || documento === '') { showToast('Nome e documento são obrigatórios', 'erro'); return; }
+        if (codigo === '') { showToast('O campo CÓDIGO é obrigatório', 'erro'); return; }
+        
+        if (!validarDocumento(documento)) {
+            showToast('Documento inválido (CPF/CNPJ)', 'erro');
+            return;
+        }
+        documento = formatarDocumento(documento);
+        
         if (valor === '') valor = '0';
         if (data === '') data = new Date().toISOString().slice(0,10);
 
-        let clientes = carregarDados();
+        let clientes = carregarDados(abaAtualModal);
+        
+        const duplicado = clientes.some((c, idx) => c.codigo === codigo && idx !== modalEditandoIndex);
+        if (duplicado) {
+            showToast('Código já existe! Use um código único.', 'erro');
+            return;
+        }
+
         const novoObj = {
             nome: nome,
             documento: documento,
             telefone: telefone,
-            valor: valor,
+            valor: parseFloat(valor) || 0,
             data: data,
             codigo: codigo,
-            servicos: [...servicosTemp]
+            servicos: [...servicosTemp],
+            tags: tags
         };
 
         if (modalEditandoIndex !== null && clientes[modalEditandoIndex]) {
             clientes[modalEditandoIndex] = novoObj;
-            alert('✅ Cliente atualizado com sucesso!');
+            showToast('✅ Cadastro atualizado com sucesso!', 'sucesso');
         } else {
             clientes.push(novoObj);
-            alert('✅ Cliente cadastrado com serviços!');
+            showToast('✅ Cadastro realizado com serviços!', 'sucesso');
         }
-        salvarDados(clientes);
+        salvarDados(clientes, abaAtualModal);
         fecharModal();
-        renderizarListaClientes();
-        renderizarListaEdicao();
-        renderizarServicosGlobais();
-        renderizarCodigos();
+        
+        recarregarTudo();
     }
 
-    function fecharModal() {
-        document.getElementById('modalCliente').style.display = 'none';
-        modalEditandoIndex = null;
-        servicosTemp = [];
-    }
-
-    function renderizarListaClientes() {
-        const clientes = carregarDados();
-        const container = document.getElementById('listaClientes');
-        if (clientes.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:40px;">➕ Nenhum cliente. Clique em "Adicionar Cliente"</div>';
+    // ---------- Renderizações com Paginação e Filtros ----------
+    function renderizarListaClientes(aba = 'clientes') {
+        const clientes = carregarDados(aba);
+        const container = document.getElementById(`listaClientes_${aba}`);
+        if (!container) return;
+        
+        // Aplicar filtros
+        let filtrados = aplicarFiltrosInterno(clientes, aba);
+        
+        // Aplicar filtro exclusivo (busca específica por nome)
+        if (filtroExclusivo[aba]) {
+            const nomeBusca = filtroExclusivo[aba].toLowerCase();
+            filtrados = filtrados.filter(c => c.nome.toLowerCase() === nomeBusca);
+            
+            // Atualizar indicador visual
+            const infoEl = document.getElementById(`filtroExclusivoInfo_${aba}`);
+            const nomeEl = document.getElementById(`filtroExclusivoNome_${aba}`);
+            if (infoEl && nomeEl) {
+                infoEl.style.display = 'flex';
+                nomeEl.textContent = `"${filtroExclusivo[aba]}"`;
+            }
+        } else {
+            // Esconder indicador se não houver filtro exclusivo
+            const infoEl = document.getElementById(`filtroExclusivoInfo_${aba}`);
+            if (infoEl) {
+                infoEl.style.display = 'none';
+            }
+        }
+        
+        // Paginação
+        const total = filtrados.length;
+        const totalPaginas = Math.ceil(total / ITENS_POR_PAGINA);
+        
+        if (paginaAtual[aba] > totalPaginas) paginaAtual[aba] = totalPaginas || 1;
+        const inicio = (paginaAtual[aba] - 1) * ITENS_POR_PAGINA;
+        const fim = inicio + ITENS_POR_PAGINA;
+        const paginados = filtrados.slice(inicio, fim);
+        
+        if (total === 0) {
+            if (filtroExclusivo[aba]) {
+                container.innerHTML = `<div style="text-align:center;padding:40px;color:#94a3b8;">🔍 Nenhum cliente encontrado com o nome "${filtroExclusivo[aba]}"</div>`;
+            } else {
+                container.innerHTML = `<div style="text-align:center;padding:40px;color:#94a3b8;">➕ Nenhum cadastro. Clique em "Adicionar"</div>`;
+            }
+            renderizarPaginacao(aba, totalPaginas);
             return;
         }
+        
         container.innerHTML = '';
-        clientes.forEach((cliente, idx) => {
+        paginados.forEach((cliente, idx) => {
+            const realIndex = clientes.indexOf(cliente);
             const card = document.createElement('div');
             card.className = 'card';
+            if (clienteSelecionadoId === cliente.codigo) {
+                card.classList.add('card-destacado');
+            }
+            
             const codigoExibido = cliente.codigo || 'SEM CÓDIGO';
             const servicosLista = Array.isArray(cliente.servicos) && cliente.servicos.length ? cliente.servicos : [];
             let servicosHtml = '';
@@ -840,40 +1805,214 @@
                 servicosLista.forEach((serv) => {
                     servicosHtml += `<div class="servico-item" onclick="copiarTexto('${escapeHTML(serv.descricao)}')">
                                         <span class="servico-texto">🔹 ${escapeHTML(serv.descricao)}</span>
-                                        <span style="font-size:12px;">📋 copiar</span>
+                                        <span style="font-size:11px;">📋 copiar</span>
                                      </div>`;
                 });
                 servicosHtml += `</div>`;
             } else {
-                servicosHtml = `<div class="servicos-container"><em style="font-size:12px;">Nenhum serviço associado</em></div>`;
+                servicosHtml = `<div class="servicos-container"><em style="font-size:12px;color:#94a3b8;">Nenhum serviço associado</em></div>`;
+            }
+            
+            // Tags
+            let tagsHtml = '';
+            if (cliente.tags && cliente.tags.length) {
+                tagsHtml = `<div class="tags-container">`;
+                cliente.tags.forEach(tag => {
+                    tagsHtml += `<span class="tag" style="background:${gerarCorTag(tag)}">${escapeHTML(tag)}</span>`;
+                });
+                tagsHtml += `</div>`;
             }
 
             card.innerHTML = `
                 <div class="card-actions">
-                    <button class="icon-btn edit-btn" onclick="abrirModalEditarCliente(${idx})">✏️</button>
-                    <button class="icon-btn delete-btn" onclick="removerCliente(${idx})">🗑️</button>
+                    <button class="icon-btn edit-btn" onclick="abrirModalEditarCliente(${realIndex}, '${aba}')" title="Editar">✏️</button>
+                    <button class="icon-btn delete-btn" onclick="removerCliente(${realIndex}, '${aba}')" title="Excluir">🗑️</button>
+                    <button class="icon-btn" onclick="enviarWhatsApp(${realIndex}, '${aba}')" title="WhatsApp" style="color:#25D366;">💬</button>
                 </div>
                 <h3>${escapeHTML(cliente.nome)}</h3>
+                ${tagsHtml}
                 <div><span class="codigo-badge">🏷️ CÓDIGO:</span> 
                     <div class="copiavel" onclick="copiarTexto('${escapeHTML(codigoExibido)}')">${escapeHTML(codigoExibido)}</div>
                 </div>
                 <p><strong>📄 Documento:</strong></p>
                 <div class="copiavel" onclick="copiarTexto('${escapeHTML(cliente.documento)}')">${escapeHTML(cliente.documento)}</div>
-                ${cliente.telefone ? `<p><strong>📞 Telefone:</strong> ${escapeHTML(cliente.telefone)}</p>` : '<p><em>Telefone opcional</em></p>'}
-                <p class="valor-devendo"><strong>💰 Valor Devido:</strong> R$ ${parseFloat(cliente.valor).toFixed(2)}</p>
+                ${cliente.telefone ? `<p><strong>📞 Telefone:</strong> ${escapeHTML(cliente.telefone)}</p>` : '<p><em style="color:#94a3b8;font-size:12px;">Telefone opcional</em></p>'}
+                <p class="valor-devendo"><strong>💰 Valor Devido:</strong> R$ ${(typeof cliente.valor === 'number' ? cliente.valor : parseFloat(cliente.valor) || 0).toFixed(2)}</p>
                 <p><strong>📅 Atualização:</strong> ${formatarDataBR(cliente.data)}</p>
                 ${servicosHtml}
-                <div class="salvo-info" style="font-size:11px; margin-top:8px;">✅ Dados locais</div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:8px;">✅ Dados locais</div>
             `;
             container.appendChild(card);
         });
+        
+        renderizarPaginacao(aba, totalPaginas);
+        atualizarListaLateral();
+        atualizarContador();
     }
 
-    function renderizarListaEdicao() {
-        const clientes = carregarDados();
-        const container = document.getElementById('listaEdicao');
+    function renderizarPaginacao(aba, totalPaginas) {
+        const container = document.getElementById(`paginacao_${aba}`);
+        if (!container) return;
+        
+        if (totalPaginas <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        let html = `<button onclick="irParaPagina('${aba}', ${paginaAtual[aba] - 1})" ${paginaAtual[aba] === 1 ? 'disabled' : ''}>◀</button>`;
+        
+        for (let i = 1; i <= totalPaginas; i++) {
+            html += `<button onclick="irParaPagina('${aba}', ${i})" class="${i === paginaAtual[aba] ? 'ativo' : ''}">${i}</button>`;
+        }
+        
+        html += `<button onclick="irParaPagina('${aba}', ${paginaAtual[aba] + 1})" ${paginaAtual[aba] === totalPaginas ? 'disabled' : ''}>▶</button>`;
+        
+        container.innerHTML = html;
+    }
+
+    function irParaPagina(aba, pagina) {
+        const total = carregarDados(aba).length;
+        const totalPaginas = Math.ceil(total / ITENS_POR_PAGINA);
+        if (pagina < 1 || pagina > totalPaginas) return;
+        paginaAtual[aba] = pagina;
+        renderizarListaClientes(aba);
+    }
+
+    // ---------- Filtros ----------
+    function aplicarFiltrosInterno(clientes, aba) {
+        const valorFiltro = document.getElementById(`filtroValor_${aba}`)?.value || '';
+        const servicoFiltro = document.getElementById(`filtroServico_${aba}`)?.value || '';
+        const dataInicio = document.getElementById(`filtroDataInicio_${aba}`)?.value || '';
+        const dataFim = document.getElementById(`filtroDataFim_${aba}`)?.value || '';
+        
+        return clientes.filter(cliente => {
+            // Filtro de valor
+            if (valorFiltro) {
+                const valor = cliente.valor || 0;
+                if (valorFiltro === 'menor50' && valor >= 50) return false;
+                if (valorFiltro === '50a200' && (valor < 50 || valor > 200)) return false;
+                if (valorFiltro === 'maior200' && valor <= 200) return false;
+            }
+            
+            // Filtro de serviço
+            if (servicoFiltro) {
+                const servicos = cliente.servicos || [];
+                const temServico = servicos.some(s => s.descricao === servicoFiltro);
+                if (!temServico) return false;
+            }
+            
+            // Filtro de data
+            if (dataInicio && cliente.data < dataInicio) return false;
+            if (dataFim && cliente.data > dataFim) return false;
+            
+            return true;
+        });
+    }
+
+    function aplicarFiltros(aba) {
+        paginaAtual[aba] = 1;
+        renderizarListaClientes(aba);
+    }
+
+    function limparFiltros(aba) {
+        document.getElementById(`filtroValor_${aba}`).value = '';
+        document.getElementById(`filtroServico_${aba}`).value = '';
+        document.getElementById(`filtroDataInicio_${aba}`).value = '';
+        document.getElementById(`filtroDataFim_${aba}`).value = '';
+        aplicarFiltros(aba);
+    }
+
+    // ---------- FUNÇÃO DE FILTRO EXCLUSIVO ----------
+    function aplicarFiltroExclusivo(aba, nomeCliente) {
+        filtroExclusivo[aba] = nomeCliente;
+        paginaAtual[aba] = 1;
+        renderizarListaClientes(aba);
+        
+        // Atualizar indicador visual
+        const infoEl = document.getElementById(`filtroExclusivoInfo_${aba}`);
+        const nomeEl = document.getElementById(`filtroExclusivoNome_${aba}`);
+        if (infoEl && nomeEl) {
+            infoEl.style.display = 'flex';
+            nomeEl.textContent = `"${nomeCliente}"`;
+        }
+        
+        // Destacar o item na lista lateral
+        document.querySelectorAll('.item-lista-rapida.destacado').forEach(el => {
+            el.classList.remove('destacado');
+        });
+        
+        // Encontrar o item na lista lateral e destacar
+        const items = document.querySelectorAll('.item-lista-rapida');
+        items.forEach(item => {
+            if (item.textContent.includes(nomeCliente)) {
+                item.classList.add('destacado');
+            }
+        });
+    }
+
+    function limparFiltroExclusivo(aba) {
+        filtroExclusivo[aba] = null;
+        paginaAtual[aba] = 1;
+        renderizarListaClientes(aba);
+        
+        const infoEl = document.getElementById(`filtroExclusivoInfo_${aba}`);
+        if (infoEl) {
+            infoEl.style.display = 'none';
+        }
+        
+        showToast('✅ Filtro exclusivo removido', 'info');
+    }
+
+    function atualizarFiltroServicos(aba) {
+        const clientes = carregarDados(aba);
+        const servicos = new Set();
+        clientes.forEach(c => {
+            (c.servicos || []).forEach(s => servicos.add(s.descricao));
+        });
+        
+        const select = document.getElementById(`filtroServico_${aba}`);
+        if (!select) return;
+        
+        const valorAtual = select.value;
+        select.innerHTML = '<option value="">📌 Todos os serviços</option>';
+        servicos.forEach(s => {
+            select.innerHTML += `<option value="${escapeHTML(s)}">${escapeHTML(s)}</option>`;
+        });
+        select.value = valorAtual;
+    }
+
+    function filtrarClientes(aba = 'clientes') {
+        const termo = document.getElementById(`buscaRapida_${aba}`).value.toLowerCase();
+        const cards = document.querySelectorAll(`#listaClientes_${aba} .card`);
+        cards.forEach(card => {
+            const texto = card.innerText.toLowerCase();
+            card.style.display = texto.includes(termo) ? 'block' : 'none';
+        });
+    }
+
+    function filtrarServicosGlobais() {
+        const filtro = document.getElementById('buscaServicoGlobal').value.toLowerCase();
+        const cards = document.querySelectorAll('#globalServicosList .card');
+        cards.forEach(card => {
+            const texto = card.innerText.toLowerCase();
+            card.style.display = texto.includes(filtro) ? 'block' : 'none';
+        });
+    }
+
+    function filtrarCodigos() {
+        const termo = document.getElementById('buscaCodigo').value.toLowerCase();
+        document.querySelectorAll('#listaCodigos .card').forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(termo) ? 'block' : 'none';
+        });
+    }
+
+    function renderizarListaEdicao(aba = 'clientes') {
+        const clientes = carregarDados(aba);
+        const container = document.getElementById(`listaEdicao_${aba}`);
+        if (!container) return;
+        
         if (!clientes.length) {
-            container.innerHTML = '<div style="text-align:center;padding:40px;">Nenhum cliente cadastrado.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;">Nenhum cadastro para editar.</div>';
             return;
         }
         container.innerHTML = '';
@@ -883,92 +2022,440 @@
             card.innerHTML = `
                 <h3>✏️ Editando: ${escapeHTML(cliente.nome)}</h3>
                 <div style="margin-top:12px;">
-                    <label>Nome:</label><input type="text" id="edit_nome_${idx}" value="${escapeHTML(cliente.nome)}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
-                    <label>Documento:</label><input type="text" id="edit_doc_${idx}" value="${escapeHTML(cliente.documento)}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
-                    <label>Telefone:</label><input type="text" id="edit_tel_${idx}" value="${escapeHTML(cliente.telefone)}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
-                    <label>Código (único):</label><input type="text" id="edit_codigo_${idx}" value="${escapeHTML(cliente.codigo || '')}" style="width:100%; margin-bottom:8px;padding:8px;border-radius:20px;">
-                    <label>Valor Devido:</label><input type="number" step="0.01" id="edit_valor_${idx}" value="${parseFloat(cliente.valor).toFixed(2)}" style="width:100%; margin-bottom:8px;">
-                    <label>Data:</label><input type="date" id="edit_data_${idx}" value="${cliente.data}" style="width:100%; margin-bottom:12px;">
-                    <label>Serviços (separados por ponto e vírgula):</label>
-                    <input type="text" id="edit_servicos_${idx}" value="${escapeHTML((cliente.servicos || []).map(s=>s.descricao).join('; '))}" style="width:100%; margin-bottom:12px;" placeholder="ex: Consultoria; Suporte Técnico">
-                    <button class="salvar" onclick="salvarEdicaoInline(${idx})">💾 Salvar Alterações</button>
-                    <button class="salvar btn-cancelar" onclick="removerCliente(${idx})">🗑️ Remover</button>
+                    <label style="font-size:12px;font-weight:600;">Nome:</label>
+                    <input type="text" id="edit_nome_${aba}_${idx}" value="${escapeHTML(cliente.nome)}" style="width:100%;margin-bottom:8px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;">
+                    <label style="font-size:12px;font-weight:600;">Documento:</label>
+                    <input type="text" id="edit_doc_${aba}_${idx}" value="${escapeHTML(cliente.documento)}" style="width:100%;margin-bottom:8px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;">
+                    <label style="font-size:12px;font-weight:600;">Telefone:</label>
+                    <input type="text" id="edit_tel_${aba}_${idx}" value="${escapeHTML(cliente.telefone)}" style="width:100%;margin-bottom:8px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;">
+                    <label style="font-size:12px;font-weight:600;">Código (único):</label>
+                    <input type="text" id="edit_codigo_${aba}_${idx}" value="${escapeHTML(cliente.codigo || '')}" style="width:100%;margin-bottom:8px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;">
+                    <label style="font-size:12px;font-weight:600;">Valor Devido:</label>
+                    <input type="number" step="0.01" id="edit_valor_${aba}_${idx}" value="${(typeof cliente.valor === 'number' ? cliente.valor : parseFloat(cliente.valor) || 0).toFixed(2)}" style="width:100%;margin-bottom:8px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;">
+                    <label style="font-size:12px;font-weight:600;">Data:</label>
+                    <input type="date" id="edit_data_${aba}_${idx}" value="${cliente.data}" style="width:100%;margin-bottom:12px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;">
+                    <label style="font-size:12px;font-weight:600;">Tags:</label>
+                    <input type="text" id="edit_tags_${aba}_${idx}" value="${escapeHTML((cliente.tags || []).join(', '))}" style="width:100%;margin-bottom:12px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;" placeholder="VIP, Urgente">
+                    <label style="font-size:12px;font-weight:600;">Serviços (separados por ;):</label>
+                    <input type="text" id="edit_servicos_${aba}_${idx}" value="${escapeHTML((cliente.servicos || []).map(s=>s.descricao).join('; '))}" style="width:100%;margin-bottom:12px;padding:8px;border-radius:16px;border:1px solid #cbd5e1;" placeholder="ex: Consultoria; Suporte Técnico">
+                    <button class="salvar" onclick="salvarEdicaoInline(${idx}, '${aba}')">💾 Salvar Alterações</button>
+                    <button class="salvar btn-cancelar" onclick="removerCliente(${idx}, '${aba}')">🗑️ Remover</button>
                 </div>
             `;
             container.appendChild(card);
         });
     }
 
-    function salvarEdicaoInline(idx) {
-        const nome = document.getElementById(`edit_nome_${idx}`).value.trim();
-        const documento = document.getElementById(`edit_doc_${idx}`).value.trim();
-        const telefone = document.getElementById(`edit_tel_${idx}`).value.trim();
-        const codigo = document.getElementById(`edit_codigo_${idx}`).value.trim();
-        const valor = document.getElementById(`edit_valor_${idx}`).value;
-        const data = document.getElementById(`edit_data_${idx}`).value;
-        const servicosRaw = document.getElementById(`edit_servicos_${idx}`).value;
-        if (nome === '' || documento === '') { alert('Nome e documento obrigatórios'); return; }
-        if (codigo === '') { alert('Código é obrigatório'); return; }
+    function salvarEdicaoInline(idx, aba = 'clientes') {
+        const nome = document.getElementById(`edit_nome_${aba}_${idx}`).value.trim();
+        let documento = document.getElementById(`edit_doc_${aba}_${idx}`).value.trim();
+        const telefone = document.getElementById(`edit_tel_${aba}_${idx}`).value.trim();
+        const codigo = document.getElementById(`edit_codigo_${aba}_${idx}`).value.trim();
+        const valor = document.getElementById(`edit_valor_${aba}_${idx}`).value;
+        const data = document.getElementById(`edit_data_${aba}_${idx}`).value;
+        const servicosRaw = document.getElementById(`edit_servicos_${aba}_${idx}`).value;
+        const tagsRaw = document.getElementById(`edit_tags_${aba}_${idx}`).value.trim();
+        const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(t => t) : [];
+        
+        if (nome === '' || documento === '') { showToast('Nome e documento obrigatórios', 'erro'); return; }
+        if (codigo === '') { showToast('Código é obrigatório', 'erro'); return; }
+        if (!validarDocumento(documento)) { showToast('Documento inválido', 'erro'); return; }
+        
+        documento = formatarDocumento(documento);
         const servicosArr = servicosRaw.split(';').map(s => s.trim()).filter(s => s !== '').map(desc => ({ descricao: desc }));
-        let clientes = carregarDados();
+        
+        let clientes = carregarDados(aba);
         if (clientes[idx]) {
             clientes[idx] = {
                 nome, documento, telefone, codigo,
-                valor: valor || '0',
+                valor: parseFloat(valor) || 0,
                 data: data || new Date().toISOString().slice(0,10),
-                servicos: servicosArr
+                servicos: servicosArr,
+                tags: tags
             };
-            salvarDados(clientes);
-            alert('Atualizado com sucesso!');
-            renderizarListaClientes();
-            renderizarListaEdicao();
-            renderizarServicosGlobais();
-            renderizarCodigos();
+            salvarDados(clientes, aba);
+            showToast('✅ Atualizado com sucesso!', 'sucesso');
+            recarregarTudo();
         }
     }
 
-    function removerCliente(idx) {
-        if (confirm('Remover cliente permanentemente?')) {
-            let clientes = carregarDados();
+    function removerCliente(idx, aba = 'clientes') {
+        if (confirm('Remover este cadastro permanentemente?')) {
+            let clientes = carregarDados(aba);
             clientes.splice(idx, 1);
-            salvarDados(clientes);
-            renderizarListaClientes();
-            renderizarListaEdicao();
-            renderizarServicosGlobais();
-            renderizarCodigos();
+            salvarDados(clientes, aba);
+            showToast('🗑️ Cadastro removido', 'info');
+            recarregarTudo();
         }
     }
 
-    function filtrarClientes() {
-        const termo = document.getElementById('buscaRapida').value.toLowerCase();
-        const cards = document.querySelectorAll('#listaClientes .card');
-        cards.forEach(card => {
-            const texto = card.innerText.toLowerCase();
-            card.style.display = texto.includes(termo) ? 'block' : 'none';
+    // ---------- WhatsApp ----------
+    function enviarWhatsApp(idx, aba) {
+        const clientes = carregarDados(aba);
+        const cliente = clientes[idx];
+        if (!cliente || !cliente.telefone) {
+            showToast('Cliente sem telefone cadastrado', 'aviso');
+            return;
+        }
+        const telefone = cliente.telefone.replace(/\D/g, '');
+        const mensagem = `Olá ${cliente.nome}! Seu valor devido é R$ ${(cliente.valor || 0).toFixed(2)}. Código: ${cliente.codigo}`;
+        const url = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+        window.open(url, '_blank');
+    }
+
+    // ---------- Painel Lateral - Lista Rápida ----------
+    function atualizarListaLateral() {
+        const container = document.getElementById('listaRapida');
+        const filtro = document.getElementById('buscaLateral').value.toLowerCase();
+        
+        const clientesClientes = carregarDados('clientes');
+        const clientesFazenda = carregarDados('fazenda');
+        
+        let todosClientes = [];
+        
+        clientesClientes.forEach(c => {
+            todosClientes.push({ ...c, origem: 'clientes' });
+        });
+        
+        clientesFazenda.forEach(c => {
+            todosClientes.push({ ...c, origem: 'fazenda' });
+        });
+        
+        if (todosClientes.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;font-size:13px;">Nenhum cadastro encontrado</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        let contador = 0;
+        
+        const ordenados = [...todosClientes].sort((a, b) => a.nome.localeCompare(b.nome));
+        
+        ordenados.forEach((cliente) => {
+            const nomeMatch = cliente.nome.toLowerCase().includes(filtro);
+            const codigoMatch = cliente.codigo?.toLowerCase().includes(filtro);
+            const docMatch = cliente.documento?.toLowerCase().includes(filtro);
+            const tagMatch = (cliente.tags || []).some(t => t.toLowerCase().includes(filtro));
+            
+            if (!nomeMatch && !codigoMatch && !docMatch && !tagMatch) return;
+            
+            contador++;
+            const div = document.createElement('div');
+            div.className = 'item-lista-rapida';
+            
+            if (clienteSelecionadoId === cliente.codigo) {
+                div.classList.add('destacado');
+            }
+            
+            const tagLabel = cliente.origem === 'fazenda' ? '🌾 Fazenda' : '📋 Clientes';
+            const tagClass = cliente.origem === 'fazenda' ? 'fazenda' : '';
+            
+            // Tags na lista rápida
+            let tagsMini = '';
+            if (cliente.tags && cliente.tags.length) {
+                tagsMini = cliente.tags.slice(0, 2).map(t => `🏷️${t}`).join(' ');
+                if (cliente.tags.length > 2) tagsMini += '...';
+            }
+            
+            div.innerHTML = `
+                <span class="nome-mini">👤 ${escapeHTML(cliente.nome)}</span>
+                <span class="badge-origem ${tagClass}">${tagLabel}</span>
+                ${tagsMini ? `<span style="font-size:10px;color:#94a3b8;">${tagsMini}</span>` : ''}
+                <!-- VALOR REMOVIDO DA LISTA RÁPIDA -->
+            `;
+            
+            div.onclick = () => {
+                const dadosOrigem = carregarDados(cliente.origem);
+                const indexReal = dadosOrigem.findIndex(c => c.codigo === cliente.codigo);
+                
+                if (indexReal !== -1) {
+                    // Remover destaques anteriores
+                    document.querySelectorAll('.item-lista-rapida.destacado').forEach(el => {
+                        el.classList.remove('destacado');
+                    });
+                    
+                    div.classList.add('destacado');
+                    clienteSelecionadoId = cliente.codigo;
+                    
+                    // Remover destaques de cards anteriores
+                    document.querySelectorAll('.card-destacado').forEach(el => {
+                        el.classList.remove('card-destacado');
+                    });
+                    
+                    // Trocar para a aba correta
+                    if (cliente.origem === 'fazenda') {
+                        trocarAba('fazenda');
+                    } else {
+                        trocarAba('lista');
+                    }
+                    
+                    // Aplicar filtro exclusivo para mostrar APENAS este cliente
+                    aplicarFiltroExclusivo(cliente.origem, cliente.nome);
+                    
+                    showToast(`🔍 Buscando: ${cliente.nome}`, 'info');
+                    
+                    // Destacar o card após renderizar
+                    setTimeout(() => {
+                        const containerId = cliente.origem === 'fazenda' ? 'listaClientes_fazenda' : 'listaClientes_clientes';
+                        const cards = document.querySelectorAll(`#${containerId} .card`);
+                        cards.forEach((card) => {
+                            if (card.innerText.includes(cliente.codigo)) {
+                                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                card.classList.add('card-destacado');
+                                setTimeout(() => {
+                                    card.classList.remove('card-destacado');
+                                }, 3000);
+                            }
+                        });
+                    }, 300);
+                } else {
+                    showToast('Cliente não encontrado', 'erro');
+                }
+            };
+            
+            div.title = `Clique para buscar exclusivamente ${cliente.nome}`;
+            container.appendChild(div);
+        });
+        
+        if (contador === 0 && filtro) {
+            container.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;font-size:13px;">Nenhum cadastro encontrado com este filtro</div>';
+        }
+    }
+
+    function filtrarListaLateral() {
+        atualizarListaLateral();
+    }
+
+    function atualizarContador() {
+        const clientesClientes = carregarDados('clientes');
+        const clientesFazenda = carregarDados('fazenda');
+        const total = clientesClientes.length + clientesFazenda.length;
+        
+        const valorTotalClientes = clientesClientes.reduce((acc, c) => acc + (typeof c.valor === 'number' ? c.valor : parseFloat(c.valor) || 0), 0);
+        const valorTotalFazenda = clientesFazenda.reduce((acc, c) => acc + (typeof c.valor === 'number' ? c.valor : parseFloat(c.valor) || 0), 0);
+        const valorTotal = valorTotalClientes + valorTotalFazenda;
+        
+        document.getElementById('contadorClientes').textContent = 
+            `${total} cadastros | Total: R$ ${valorTotal.toFixed(2)}`;
+    }
+
+    // ---------- Exportações ----------
+    function copiarTexto(texto) {
+        navigator.clipboard.writeText(texto).then(() => {
+            showToast(`📋 Copiado: ${texto.substring(0, 30)}${texto.length > 30 ? '...' : ''}`, 'sucesso');
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = texto;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('📋 Copiado!', 'sucesso');
         });
     }
 
-    function copiarTexto(texto) {
-        navigator.clipboard.writeText(texto).then(() => alert(`Copiado: ${texto}`)).catch(() => alert('Erro ao copiar'));
+    function exportarCSV(aba = 'clientes') {
+        const clientes = carregarDados(aba);
+        if (clientes.length === 0) {
+            showToast('Nenhum dado para exportar', 'aviso');
+            return;
+        }
+        
+        let csvContent = "Nome;Documento;Telefone;Codigo;Valor;Data;Servicos;Tags\n";
+        
+        clientes.forEach(c => {
+            const servicosStr = (c.servicos || []).map(s => s.descricao.replace(/;/g, ',')).join('|');
+            const tagsStr = (c.tags || []).join('|');
+            
+            const row = [
+                c.nome || '',
+                c.documento || '',
+                c.telefone || '',
+                c.codigo || '',
+                (typeof c.valor === 'number' ? c.valor : parseFloat(c.valor) || 0),
+                c.data || '',
+                servicosStr,
+                tagsStr
+            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';');
+            
+            csvContent += row + "\n";
+        });
+
+        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `backup_${aba}_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast('📥 CSV exportado com sucesso!', 'sucesso');
     }
 
+    function exportarJSON(aba = 'clientes') {
+        const clientes = carregarDados(aba);
+        if (clientes.length === 0) {
+            showToast('Nenhum dado para exportar', 'aviso');
+            return;
+        }
+        
+        const json = JSON.stringify(clientes, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `backup_${aba}_${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast('📦 JSON exportado com sucesso!', 'sucesso');
+    }
+
+    function exportarExcel(aba = 'clientes') {
+        const clientes = carregarDados(aba);
+        if (clientes.length === 0) {
+            showToast('Nenhum dado para exportar', 'aviso');
+            return;
+        }
+        
+        // Exportar como CSV (compatível com Excel)
+        let csvContent = "Nome,Documento,Telefone,Codigo,Valor,Data,Servicos,Tags\n";
+        
+        clientes.forEach(c => {
+            const servicosStr = (c.servicos || []).map(s => s.descricao.replace(/,/g, ';')).join('|');
+            const tagsStr = (c.tags || []).join('|');
+            
+            const row = [
+                c.nome || '',
+                c.documento || '',
+                c.telefone || '',
+                c.codigo || '',
+                (typeof c.valor === 'number' ? c.valor : parseFloat(c.valor) || 0),
+                c.data || '',
+                servicosStr,
+                tagsStr
+            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
+            
+            csvContent += row + "\n";
+        });
+
+        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `excel_${aba}_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast('📊 Arquivo Excel (CSV) exportado!', 'sucesso');
+    }
+
+    function acionarImportacao(aba = 'clientes') {
+        document.getElementById(`inputImportarCSV_${aba}`).click();
+    }
+
+    function importarDados(event, aba = 'clientes') {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            
+            if (file.name.endsWith('.json')) {
+                try {
+                    const data = JSON.parse(text);
+                    if (Array.isArray(data) && data.length > 0) {
+                        if (confirm(`Foram encontrados ${data.length} cadastros no arquivo JSON.\n\nOK = Substituir dados atuais\nCancelar = Adicionar aos existentes`)) {
+                            salvarDados(data, aba);
+                        } else {
+                            const atuais = carregarDados(aba);
+                            salvarDados(atuais.concat(data), aba);
+                        }
+                        showToast('✅ Importação JSON concluída!', 'sucesso');
+                        recarregarTudo();
+                    } else {
+                        showToast('❌ JSON inválido ou vazio', 'erro');
+                    }
+                } catch (err) {
+                    showToast('❌ Erro ao ler JSON: ' + err.message, 'erro');
+                }
+                return;
+            }
+            
+            const rows = text.split('\n').map(r => r.trim()).filter(r => r);
+            
+            if (rows.length < 2) {
+                showToast('Arquivo vazio ou formato inválido', 'erro');
+                return;
+            }
+
+            const novosClientes = [];
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cols = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').replace(/""/g, '"'));
+
+                if (cols.length >= 6) {
+                    const servicosStr = cols[6] || '';
+                    const servicosArr = servicosStr ? servicosStr.split('|').map(s => ({ descricao: s.trim() })).filter(s => s.descricao) : [];
+                    const tagsStr = cols[7] || '';
+                    const tags = tagsStr ? tagsStr.split('|').map(t => t.trim()).filter(t => t) : [];
+
+                    novosClientes.push({
+                        nome: cols[0],
+                        documento: cols[1],
+                        telefone: cols[2] || '',
+                        codigo: cols[3],
+                        valor: parseFloat(cols[4]) || 0,
+                        data: cols[5] || new Date().toISOString().slice(0,10),
+                        servicos: servicosArr,
+                        tags: tags
+                    });
+                }
+            }
+
+            if (novosClientes.length > 0) {
+                if (confirm(`Foram encontrados ${novosClientes.length} cadastros no arquivo CSV.\n\nOK = Substituir dados atuais\nCancelar = Adicionar aos existentes`)) {
+                    salvarDados(novosClientes, aba);
+                } else {
+                    const atuais = carregarDados(aba);
+                    salvarDados(atuais.concat(novosClientes), aba);
+                }
+                showToast('✅ Importação CSV concluída!', 'sucesso');
+                recarregarTudo();
+            } else {
+                showToast('❌ Nenhum dado válido encontrado para importar', 'erro');
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    }
+
+    // ---------- Renderizações Globais ----------
     function renderizarServicosGlobais() {
-        const clientes = carregarDados();
+        const clientes = carregarDados('clientes');
+        const fazenda = carregarDados('fazenda');
+        const todos = [...clientes, ...fazenda];
         const container = document.getElementById('globalServicosList');
         let itens = [];
-        clientes.forEach(cli => {
+        todos.forEach(cli => {
             const cod = cli.codigo || '---';
             const servicosArr = cli.servicos || [];
             servicosArr.forEach(serv => {
                 itens.push({
                     clienteNome: cli.nome,
                     codigo: cod,
-                    servicoDesc: serv.descricao
+                    servicoDesc: serv.descricao,
+                    origem: '📋 Clientes'
                 });
             });
         });
         if (itens.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:40px;">📭 Nenhum serviço cadastrado ainda. Adicione serviços nos clientes.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;">📭 Nenhum serviço cadastrado ainda.</div>';
             return;
         }
         container.innerHTML = '';
@@ -986,24 +2473,20 @@
         });
     }
 
-    function filtrarServicosGlobais() {
-        const filtro = document.getElementById('buscaServicoGlobal').value.toLowerCase();
-        const cards = document.querySelectorAll('#globalServicosList .card');
-        cards.forEach(card => {
-            const texto = card.innerText.toLowerCase();
-            card.style.display = texto.includes(filtro) ? 'block' : 'none';
-        });
-    }
-
-    window.onclick = function(e) { if (e.target === document.getElementById('modalCliente')) fecharModal(); };
-
     function renderizarCodigos() {
-        const clientes = carregarDados();
+        const clientes = carregarDados('clientes');
+        const fazenda = carregarDados('fazenda');
+        const todos = [...clientes, ...fazenda];
         const container = document.getElementById('listaCodigos');
         if(!container) return;
         container.innerHTML='';
 
-        clientes.forEach(cliente=>{
+        if (todos.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;">Nenhum código cadastrado</div>';
+            return;
+        }
+
+        todos.forEach(cliente=>{
             const card=document.createElement('div');
             card.className='card';
 
@@ -1012,126 +2495,193 @@
                 servicos += `<div class="servico-item" onclick="copiarTexto('${escapeHTML(serv.descricao)}')">${escapeHTML(serv.descricao)}</div>`;
             });
 
+            let tagsHtml = '';
+            if (cliente.tags && cliente.tags.length) {
+                tagsHtml = `<div class="tags-container">`;
+                cliente.tags.forEach(tag => {
+                    tagsHtml += `<span class="tag" style="background:${gerarCorTag(tag)}">${escapeHTML(tag)}</span>`;
+                });
+                tagsHtml += `</div>`;
+            }
+
             card.innerHTML=`
-                <h3>${escapeHTML(cliente.codigo || 'SEM CÓDIGO')}</h3>
+                <h3>🏷️ ${escapeHTML(cliente.codigo || 'SEM CÓDIGO')}</h3>
                 <div class="copiavel" onclick="copiarTexto('${escapeHTML(cliente.codigo || '')}')">${escapeHTML(cliente.codigo || '')}</div>
-                ${servicos || '<em>Nenhum serviço vinculado</em>'}
+                <p><strong>Cliente:</strong> ${escapeHTML(cliente.nome)}</p>
+                ${tagsHtml}
+                ${servicos || '<em style="color:#94a3b8;">Nenhum serviço vinculado</em>'}
             `;
 
             container.appendChild(card);
         });
     }
 
-    function filtrarCodigos(){
-        const termo=document.getElementById('buscaCodigo').value.toLowerCase();
-        document.querySelectorAll('#listaCodigos .card').forEach(card=>{
-            card.style.display = card.innerText.toLowerCase().includes(termo) ? 'block' : 'none';
+    // ---------- Relatórios ----------
+    function gerarRelatorios() {
+        const clientes = carregarDados('clientes');
+        const fazenda = carregarDados('fazenda');
+        const todos = [...clientes, ...fazenda];
+        
+        const total = todos.length;
+        const totalDevido = todos.reduce((acc, c) => acc + (c.valor || 0), 0);
+        const media = total > 0 ? totalDevido / total : 0;
+        const comServicos = todos.filter(c => c.servicos && c.servicos.length > 0).length;
+        
+        document.getElementById('relTotalClientes').textContent = total;
+        document.getElementById('relTotalDevido').textContent = `R$ ${totalDevido.toFixed(2)}`;
+        document.getElementById('relMediaCliente').textContent = `R$ ${media.toFixed(2)}`;
+        document.getElementById('relComServicos').textContent = comServicos;
+        
+        // Gráfico
+        const ctx = document.getElementById('graficoClientes').getContext('2d');
+        const valores = todos.map(c => c.valor || 0);
+        const labels = todos.map(c => c.nome.length > 15 ? c.nome.substring(0, 15) + '...' : c.nome);
+        
+        if (window.graficoInstance) {
+            window.graficoInstance.destroy();
+        }
+        
+        window.graficoInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels.length > 20 ? labels.slice(0, 20) : labels,
+                datasets: [{
+                    label: 'Valor Devido (R$)',
+                    data: valores.length > 20 ? valores.slice(0, 20) : valores,
+                    backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Valores por Cliente' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
+        
+        // Relatório detalhado
+        const detalhado = document.getElementById('relatorioDetalhado');
+        const top5 = [...todos].sort((a, b) => (b.valor || 0) - (a.valor || 0)).slice(0, 5);
+        
+        if (top5.length) {
+            detalhado.innerHTML = `
+                <h3>🏆 Top 5 Maiores Devedores</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 10px;">
+                    ${top5.map(c => `
+                        <div class="card" style="padding:12px; text-align:center;">
+                            <strong>${escapeHTML(c.nome)}</strong>
+                            <p class="valor-devendo">R$ ${(c.valor || 0).toFixed(2)}</p>
+                            <small style="color:#94a3b8;">${escapeHTML(c.codigo)}</small>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        showToast('📊 Relatórios gerados com sucesso!', 'sucesso');
     }
 
-    function exportarCSV() {
-        const clientes = carregarDados();
-        if (clientes.length === 0) {
-            alert('Nenhum dado para exportar.');
+    // ---------- Etiquetas ----------
+    function gerarEtiquetas() {
+        const clientes = carregarDados('clientes');
+        const fazenda = carregarDados('fazenda');
+        const todos = [...clientes, ...fazenda];
+        
+        if (todos.length === 0) {
+            showToast('Nenhum cliente cadastrado', 'aviso');
             return;
         }
         
-        let csvContent = "Nome;Documento;Telefone;Codigo;Valor;Data;Servicos\n";
+        const selecionados = todos.slice(0, 20); // Limitar a 20 etiquetas
         
-        clientes.forEach(c => {
-            const servicosStr = (c.servicos || []).map(s => s.descricao.replace(/;/g, ',')).join('|');
-            
-            const row = [
-                c.nome || '',
-                c.documento || '',
-                c.telefone || '',
-                c.codigo || '',
-                c.valor || '0',
-                c.data || '',
-                servicosStr
-            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';');
-            
-            csvContent += row + "\n";
-        });
-
-        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'backup_clientes_pro.csv';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-
-    function acionarImportacao() {
-        document.getElementById('inputImportarCSV').click();
-    }
-
-    function importarCSV(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const rows = text.split('\n').map(r => r.trim()).filter(r => r);
-            
-            if (rows.length < 2) {
-                alert('Arquivo vazio ou formato inválido.');
-                return;
-            }
-
-            const novosClientes = [];
-            
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                const cols = row.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').replace(/""/g, '"'));
-
-                if (cols.length >= 6) {
-                    const servicosStr = cols[6] || '';
-                    const servicosArr = servicosStr ? servicosStr.split('|').map(s => ({ descricao: s.trim() })).filter(s => s.descricao) : [];
-
-                    novosClientes.push({
-                        nome: cols[0],
-                        documento: cols[1],
-                        telefone: cols[2],
-                        codigo: cols[3],
-                        valor: cols[4],
-                        data: cols[5],
-                        servicos: servicosArr
-                    });
+        const conteudo = selecionados.map(c => `
+            <div class="etiqueta">
+                <div class="codigo">${escapeHTML(c.codigo || '---')}</div>
+                <div class="nome">${escapeHTML(c.nome)}</div>
+                <div class="documento">${escapeHTML(c.documento || '')}</div>
+                <div class="valor">R$ ${(c.valor || 0).toFixed(2)}</div>
+                ${c.tags && c.tags.length ? `<div class="tags">${c.tags.map(t => `🏷️${t}`).join(' ')}</div>` : ''}
+            </div>
+        `).join('');
+        
+        const janela = window.open('', '_blank');
+        janela.document.write(`
+            <html>
+            <head><title>Etiquetas - Clientes PRO</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { padding: 20px; font-family: Arial, sans-serif; background: #f5f7fb; }
+                .etiqueta { 
+                    border: 2px solid #2563eb; 
+                    padding: 15px; 
+                    margin: 10px; 
+                    width: 200px; 
+                    display: inline-block;
+                    text-align: center;
+                    background: white;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 }
-            }
-
-            if (novosClientes.length > 0) {
-                if(confirm(`Foram encontrados ${novosClientes.length} clientes no arquivo CSV.\n\nClique em OK para SUBSTITUIR todos os seus dados atuais por estes.\nClique em CANCELAR para apenas ADICIONAR os arquivos aos clientes que você já tem cadastrado.`)) {
-                    salvarDados(novosClientes);
-                } else {
-                    const atuais = carregarDados();
-                    salvarDados(atuais.concat(novosClientes));
+                .codigo { font-weight: bold; font-size: 18px; color: #2563eb; }
+                .nome { font-size: 16px; font-weight: 600; margin: 6px 0; }
+                .documento { font-size: 12px; color: #64748b; }
+                .valor { font-size: 14px; font-weight: 700; color: #dc2626; margin-top: 4px; }
+                .tags { font-size: 10px; color: #94a3b8; margin-top: 4px; }
+                @media print {
+                    body { background: white; padding: 10px; }
+                    .etiqueta { box-shadow: none; border-color: #ccc; }
                 }
-                alert('✅ Importação concluída com sucesso!');
-                renderizarListaClientes();
-                renderizarListaEdicao();
-                renderizarServicosGlobais();
-                renderizarCodigos();
-            } else {
-                alert('❌ Nenhum dado válido encontrado para importar.');
-            }
-        };
-        reader.readAsText(file);
-        event.target.value = '';
+            </style>
+            </head>
+            <body>
+                <h2 style="text-align:center;margin-bottom:20px;">🏷️ Etiquetas - ${new Date().toLocaleDateString()}</h2>
+                ${conteudo}
+                <script>
+                    window.onload = function() { 
+                        setTimeout(function() { window.print(); }, 500);
+                    }
+                <\/script>
+            </body>
+            </html>
+        `);
+        janela.document.close();
     }
+
+    // ---------- Recarregar Tudo ----------
+    function recarregarTudo() {
+        renderizarListaClientes('clientes');
+        renderizarListaEdicao('clientes');
+        renderizarListaClientes('fazenda');
+        renderizarServicosGlobais();
+        renderizarCodigos();
+        atualizarFiltroServicos('clientes');
+        atualizarFiltroServicos('fazenda');
+        atualizarListaLateral();
+        atualizarContador();
+    }
+
+    // ---------- Inicialização ----------
+    window.onclick = function(e) { 
+        if (e.target === document.getElementById('modalCliente')) fecharModal(); 
+    };
 
     function init() { 
         carregarTema();
-        renderizarListaClientes(); 
-        renderizarServicosGlobais();
-        renderizarCodigos();
+        recarregarTudo();
+        backupAutomatico();
+        showToast('🚀 Sistema v3.0 carregado! Ctrl+N = novo | ESC = voltar', 'info');
     }
-    init();
+
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
